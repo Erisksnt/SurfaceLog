@@ -1,5 +1,5 @@
 from .parser import parse_line
-
+from classifier import classify_event
 
 def analyze_log(file_path: str) -> list:
     events = []
@@ -8,6 +8,7 @@ def analyze_log(file_path: str) -> list:
         for line in f:
             event = parse_line(line)
             if event:
+                event = classify_event(event)
                 events.append(event)
 
     return events
