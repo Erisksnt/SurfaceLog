@@ -1,5 +1,6 @@
 import argparse
 import sys
+from surfacelog.core.analyzer import analyze_log
 
 
 def main():
@@ -20,15 +21,49 @@ def main():
         help="Path to log file (e.g. auth.log)"
     )
 
+    analyze_parser.add_argument(
+        "--alerts-only",
+        action="store_true",
+        help="Show only detected security alerts"
+    )
+
     args = parser.parse_args()
 
     if args.command == "analyze":
-        run_analyze(args.logfile)
+        run_analyze(args.logfile, args.alerts_only)
     else:
         parser.print_help()
         sys.exit(1)
 
 
-def run_analyze(logfile: str):
-    print(f"🔍 Analyzing log file: {logfile}")
+def run_analyze(logfile: str, alerts_only: bool):
+    print(f"\n🔍 Analyzing log file: {logfile}\n")
 
+    result = analyze_log(logfile)
+
+    events = result.get("events", [])
+    alerts = result.get("alerts", [])
+
+    if not alerts_only:
+        print(f"📄 Events processed: {len(events)}")
+
+    if alerts:
+        print(f"\n🚨 SECURITY ALERTS ({len(alerts)})\n")
+        for alert in alerts:
+            print_alert(alert)
+    else:
+        print("\n✅ No critical alerts detected.")
+
+
+def print_alert(alert: dict):
+    print("────────────────────────────")
+    print(f"🚨 Type      : {alert.get('alert_type')}")
+    print(f"🌐 IP        : {alert.get('ip')}")
+    print(f"🔢 Attempts : {alert.get('attempts')}")
+    print(f"⏱️ Window   : {alert.get('window_seconds')}s")
+    print(f"🔥 Severity : {alert.get('severity')}")
+    print("────────────────────────────\n")
+
+
+if __name__ == "__main__":
+    main()
