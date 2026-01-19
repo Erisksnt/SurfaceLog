@@ -1,6 +1,8 @@
 import argparse
 import sys
+
 from surfacelog.core.analyzer import analyze_log
+from surfacelog.core.detector import detect_bruteforce
 
 
 def main():
@@ -20,7 +22,6 @@ def main():
         "logfile",
         help="Path to log file (e.g. auth.log)"
     )
-
     analyze_parser.add_argument(
         "--alerts-only",
         action="store_true",
@@ -39,11 +40,13 @@ def main():
 def run_analyze(logfile: str, alerts_only: bool):
     print(f"\n🔍 Analyzing log file: {logfile}\n")
 
-    result = analyze_log(logfile)
+    # 1️⃣ Core analysis
+    events = analyze_log(logfile)
 
-    events = result.get("events", [])
-    alerts = result.get("alerts", [])
+    # 2️⃣ Detection layer
+    alerts = detect_bruteforce(events)
 
+    # 3️⃣ Output
     if not alerts_only:
         print(f"📄 Events processed: {len(events)}")
 
@@ -57,11 +60,11 @@ def run_analyze(logfile: str, alerts_only: bool):
 
 def print_alert(alert: dict):
     print("────────────────────────────")
-    print(f"🚨 Type      : {alert.get('alert_type')}")
-    print(f"🌐 IP        : {alert.get('ip')}")
-    print(f"🔢 Attempts : {alert.get('attempts')}")
-    print(f"⏱️ Window   : {alert.get('window_seconds')}s")
-    print(f"🔥 Severity : {alert.get('severity')}")
+    print(f"🚨 Type      : {alert['alert_type']}")
+    print(f"🌐 IP        : {alert['ip']}")
+    print(f"🔢 Attempts : {alert['attempts']}")
+    print(f"⏱️ Window   : {alert['window_seconds']}s")
+    print(f"🔥 Severity : {alert['severity']}")
     print("────────────────────────────\n")
 
 

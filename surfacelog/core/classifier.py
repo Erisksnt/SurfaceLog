@@ -1,35 +1,31 @@
-from surfacelog.core.models import EventType, Severity
+from surfacelog.core.events import LogEvent
 
-def classify_event(event: dict) -> dict:
-    message = event.get("message", "").lower()
 
-    # ---- Tipo de evento ----
+def classify_event(event: LogEvent) -> LogEvent:
+    message = event.message.lower()
+
     if "failed password" in message or "authentication failure" in message:
-        event_type = EventType.AUTH_FAILURE
-        severity = Severity.HIGH
+        event.event_type = "AUTH_FAILURE"
+        event.severity = "HIGH"
 
     elif "accepted password" in message or "login successful" in message:
-        event_type = EventType.AUTH_SUCCESS
-        severity = Severity.LOW
+        event.event_type = "AUTH_SUCCESS"
+        event.severity = "LOW"
 
     elif "denied" in message or "permission denied" in message:
-        event_type = EventType.ACCESS_DENIED
-        severity = Severity.HIGH
+        event.event_type = "ACCESS_DENIED"
+        event.severity = "HIGH"
 
     elif "error" in message:
-        event_type = EventType.ERROR
-        severity = Severity.HIGH
+        event.event_type = "ERROR"
+        event.severity = "HIGH"
 
     elif "warning" in message:
-        event_type = EventType.WARNING
-        severity = Severity.MEDIUM
+        event.event_type = "WARNING"
+        event.severity = "MEDIUM"
 
     else:
-        event_type = EventType.INFO
-        severity = Severity.LOW
-
-    # ---- Enriquecimento do evento ----
-    event["event_type"] = event_type.value
-    event["severity"] = severity.value
+        event.event_type = "INFO"
+        event.severity = "LOW"
 
     return event

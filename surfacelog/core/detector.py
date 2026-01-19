@@ -1,37 +1,31 @@
-from collections import defaultdict
-from datetime import timedelta
-
-
-def detect_bruteforce(events: list, threshold: int = 5, window_seconds: int = 60) -> list:
+def detect_bruteforce(events, threshold=5, window_seconds=60):
     alerts = []
-    events_by_ip = defaultdict(list)
+
+    failures_by_ip = {}
 
     for event in events:
-        if event.get("event_type") == "AUTH_FAILURE":
-            ip = event.get("ip")
-            timestamp = event.get("timestamp")
+        if event.event_type != "AUTH_FAILURE":
+            continue
 
-            if ip and timestamp:
-                events_by_ip[ip].append(timestamp)
+        ip = event.source_ip
+        failures_by_ip.setdefault(ip, []).append(event.timestamp)
 
-    for ip, timestamps in events_by_ip.items():
+    for ip, timestamps in failures_by_ip.items():
         timestamps.sort()
 
         for i in range(len(timestamps)):
-            start = timestamps[i]
-            count = 1
+            window = timestamps[i:i + threshold]
 
-            for j in range(i + 1, len(timestamps)):
-                if timestamps[j] - start <= timedelta(seconds=window_seconds):
-                    count += 1
-                else:
-                    break
+            if len(window) < threshold:
+                break
 
-            if count >= threshold:
+            delta = (window[-1] - window[0]).total_seconds()
+
+            if delta <= window_seconds:
                 alerts.append({
                     "alert_type": "BRUTE_FORCE",
                     "ip": ip,
-                    "attempts": count,
+                    "attempts": threshold,
                     "window_seconds": window_seconds,
                     "severity": "CRITICAL"
                 })
