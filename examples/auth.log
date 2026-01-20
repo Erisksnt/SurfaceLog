@@ -4,3 +4,6 @@ Jan 10 12:01:30 server sshd[1234]: Failed password for root from 192.168.1.10 po
 Jan 10 12:02:10 server sshd[1234]: Failed password for root from 192.168.1.20 port 22
 Jan 10 12:01:30 server sshd[1234]: Failed password for root from 192.168.1.10 port 22
 Jan 10 12:01:30 server sshd[1234]: Failed password for root from 192.168.1.10 port 22
+jan/01 20:03:35 dhcp,info dhcp2 deassigned 172.17.2.238 from C2:82:6D:93:36:CD 
+jan/02 20:03:35 dhcp,info dhcp2 deassigned 172.17.2.238 from C2:82:6D:93:36:CD 
+jan 02 20:03:35 dhcp,info dhcp2 deassigned 172.17.2.238 from C2:82:6D:93:36:CD 
