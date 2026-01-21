@@ -1,8 +1,6 @@
 import argparse
 import sys
-
 from surfacelog.core.analyzer import analyze_log
-from surfacelog.core.detector import detect_bruteforce
 
 
 def main():
@@ -13,15 +11,16 @@ def main():
 
     subparsers = parser.add_subparsers(dest="command")
 
-    # analyze command
     analyze_parser = subparsers.add_parser(
         "analyze",
         help="Analyze a log file"
     )
+
     analyze_parser.add_argument(
         "logfile",
         help="Path to log file (e.g. auth.log)"
     )
+
     analyze_parser.add_argument(
         "--alerts-only",
         action="store_true",
@@ -40,13 +39,12 @@ def main():
 def run_analyze(logfile: str, alerts_only: bool):
     print(f"\n🔍 Analyzing log file: {logfile}\n")
 
-    # 1️⃣ Core analysis
-    events = analyze_log(logfile)
+    # 🔥 Analyzer já faz tudo
+    result = analyze_log(logfile)
 
-    # 2️⃣ Detection layer
-    alerts = detect_bruteforce(events)
+    events = result["events"]
+    alerts = result["alerts"]
 
-    # 3️⃣ Output
     if not alerts_only:
         print(f"📄 Events processed: {len(events)}")
 
