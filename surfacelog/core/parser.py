@@ -1,39 +1,49 @@
 import re
-from datetime import datetime
+from datetime import datetime, date
 from surfacelog.core.events import LogEvent
 
-# Aceita:
-# Jan 10 12:01:22
-# jan/01 20:03:35
-LOG_PATTERN = re.compile(
-    r'(?P<timestamp>\w{3}[\/\s]\d+\s[\d:]+)\s.+?:\s(?P<msg>.+)'
+# Regex com data (Jan 10 12:01:22 | jan/01 12:01:22)
+PATTERN_WITH_DATE = re.compile(
+    r'(?P<ts>\w{3}[\/\s]\d+\s\d{2}:\d{2}:\d{2}).*?(?:from\s)?(?P<ip>\d+\.\d+\.\d+\.\d+)?.*(?P<msg>.+)',
+    re.IGNORECASE
+)
+
+# Regex só horário (08:38:45 ...)
+PATTERN_TIME_ONLY = re.compile(
+    r'(?P<ts>\d{2}:\d{2}:\d{2}).*?(?:from\s)?(?P<ip>\d+\.\d+\.\d+\.\d+)?.*(?P<msg>.+)',
+    re.IGNORECASE
 )
 
 
 def parse_line(line: str) -> LogEvent | None:
-    match = LOG_PATTERN.search(line)
-    if not match:
+    line = line.strip()
+    if not line:
         return None
 
-    raw_ts = match.group("timestamp").replace("/", " ")
+    match = PATTERN_WITH_DATE.search(line)
+    timestamp = None
 
-    try:
-        timestamp = datetime.strptime(raw_ts, "%b %d %H:%M:%S")
-    except ValueError:
-        return None
+    if match:
+        raw_ts = match.group("ts").replace("/", " ")
+        try:
+            timestamp = datetime.strptime(raw_ts, "%b %d %H:%M:%S")
+        except ValueError:
+            return None
+    else:
+        match = PATTERN_TIME_ONLY.search(line)
+        if not match:
+            return None
 
-    msg = match.group("msg")
-
-    # Extrai IP de dentro da mensagem
-    ip_match = re.search(r'(\d+\.\d+\.\d+\.\d+)', msg)
-    if not ip_match:
-        return None
+        # Assume data de hoje
+        today = date.today()
+        time_part = datetime.strptime(match.group("ts"), "%H:%M:%S").time()
+        timestamp = datetime.combine(today, time_part)
 
     return LogEvent(
         timestamp=timestamp,
-        source_ip=ip_match.group(1),
-        message=msg.lower(),
-        raw=line.strip()
+        source_ip=match.group("ip"),
+        message=match.group("msg"),
+        raw=line
     )
 
 

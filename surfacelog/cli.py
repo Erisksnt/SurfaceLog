@@ -11,6 +11,7 @@ def main():
 
     subparsers = parser.add_subparsers(dest="command")
 
+    # analyze command
     analyze_parser = subparsers.add_parser(
         "analyze",
         help="Analyze a log file"
@@ -39,7 +40,7 @@ def main():
 def run_analyze(logfile: str, alerts_only: bool):
     print(f"\n🔍 Analyzing log file: {logfile}\n")
 
-    # 🔥 Analyzer já faz tudo
+    # 🔥 Analyzer faz parse + classify + detect
     result = analyze_log(logfile)
 
     events = result["events"]

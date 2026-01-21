@@ -7,6 +7,7 @@ class EventType(str, Enum):
     ERROR = "ERROR"
     WARNING = "WARNING"
     INFO = "INFO"
+    UNKNOWN = "unknown"
 
 
 class Severity(str, Enum):
