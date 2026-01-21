@@ -4,13 +4,19 @@ from surfacelog.core.events import LogEvent
 
 # Regex com data (Jan 10 12:01:22 | jan/01 12:01:22)
 PATTERN_WITH_DATE = re.compile(
-    r'(?P<ts>\w{3}[\/\s]\d+\s\d{2}:\d{2}:\d{2}).*?(?:from\s)?(?P<ip>\d+\.\d+\.\d+\.\d+)?.*(?P<msg>.+)',
+    r'(?P<ts>\w{3}[\/\s]\d+\s\d{2}:\d{2}:\d{2})',
     re.IGNORECASE
 )
 
 # Regex só horário (08:38:45 ...)
 PATTERN_TIME_ONLY = re.compile(
-    r'(?P<ts>\d{2}:\d{2}:\d{2}).*?(?:from\s)?(?P<ip>\d+\.\d+\.\d+\.\d+)?.*(?P<msg>.+)',
+    r'(?P<ts>\d{2}:\d{2}:\d{2})',
+    re.IGNORECASE
+)
+
+# Regex para extrair IP (em qualquer lugar da linha)
+PATTERN_IP = re.compile(
+    r'(?:from\s+)?(?P<ip>\d+\.\d+\.\d+\.\d+)',
     re.IGNORECASE
 )
 
@@ -20,29 +26,42 @@ def parse_line(line: str) -> LogEvent | None:
     if not line:
         return None
 
-    match = PATTERN_WITH_DATE.search(line)
     timestamp = None
+    source_ip = None
 
-    if match:
-        raw_ts = match.group("ts").replace("/", " ")
+    # Tentar extrair timestamp com data
+    match_date = PATTERN_WITH_DATE.search(line)
+    if match_date:
+        raw_ts = match_date.group("ts").replace("/", " ")
         try:
             timestamp = datetime.strptime(raw_ts, "%b %d %H:%M:%S")
         except ValueError:
-            return None
-    else:
-        match = PATTERN_TIME_ONLY.search(line)
-        if not match:
-            return None
+            pass
 
-        # Assume data de hoje
-        today = date.today()
-        time_part = datetime.strptime(match.group("ts"), "%H:%M:%S").time()
-        timestamp = datetime.combine(today, time_part)
+    # Se não achou com data, tentar só com horário
+    if not timestamp:
+        match_time = PATTERN_TIME_ONLY.search(line)
+        if match_time:
+            try:
+                today = date.today()
+                time_part = datetime.strptime(match_time.group("ts"), "%H:%M:%S").time()
+                timestamp = datetime.combine(today, time_part)
+            except ValueError:
+                pass
+
+    # Se ainda não tem timestamp, descarta a linha
+    if not timestamp:
+        return None
+
+    # Tentar extrair IP (se houver)
+    match_ip = PATTERN_IP.search(line)
+    if match_ip:
+        source_ip = match_ip.group("ip")
 
     return LogEvent(
         timestamp=timestamp,
-        source_ip=match.group("ip"),
-        message=match.group("msg"),
+        source_ip=source_ip,
+        message=line.strip(),
         raw=line
     )
 
