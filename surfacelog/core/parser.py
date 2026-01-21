@@ -20,6 +20,12 @@ PATTERN_IP = re.compile(
     re.IGNORECASE
 )
 
+# Regex para extrair porta (procura "port XXXX")
+PATTERN_PORT = re.compile(
+    r'port\s+(\d+)',
+    re.IGNORECASE
+)
+
 
 def parse_line(line: str) -> LogEvent | None:
     line = line.strip()
@@ -58,11 +64,18 @@ def parse_line(line: str) -> LogEvent | None:
     if match_ip:
         source_ip = match_ip.group("ip")
 
+    # Tentar extrair porta (se houver)
+    source_port = None
+    match_port = PATTERN_PORT.search(line)
+    if match_port:
+        source_port = match_port.group(1)
+
     return LogEvent(
         timestamp=timestamp,
         source_ip=source_ip,
         message=line.strip(),
-        raw=line
+        raw=line,
+        source_port=source_port
     )
 
 

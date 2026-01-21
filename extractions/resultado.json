@@ -1,0 +1,113 @@
+[
+  {
+    "alert_type": "BRUTE_FORCE",
+    "ip": "172.16.0.78",
+    "attempts": 13,
+    "window_seconds": 60,
+    "severity": "CRITICAL"
+  },
+  {
+    "alert_type": "OFF_HOURS_ACTIVITY",
+    "timestamp": "1900-01-03T21:15:36",
+    "ip": "172.16.0.78",
+    "event_type": "AUTH_FAILURE",
+    "message": "jan/03 21:15:36 system,error,critical login failure for user admin from 172.16.0.78 via winbox",
+    "severity": "MEDIUM"
+  },
+  {
+    "alert_type": "OFF_HOURS_ACTIVITY",
+    "timestamp": "1900-01-03T21:15:37",
+    "ip": "172.16.0.78",
+    "event_type": "AUTH_FAILURE",
+    "message": "jan/03 21:15:37 system,error,critical login failure for user admin from 172.16.0.78 via winbox",
+    "severity": "MEDIUM"
+  },
+  {
+    "alert_type": "OFF_HOURS_ACTIVITY",
+    "timestamp": "1900-01-03T21:15:38",
+    "ip": "172.16.0.78",
+    "event_type": "AUTH_FAILURE",
+    "message": "jan/03 21:15:38 system,error,critical login failure for user admin from 172.16.0.78 via winbox",
+    "severity": "MEDIUM"
+  },
+  {
+    "alert_type": "OFF_HOURS_ACTIVITY",
+    "timestamp": "1900-01-03T21:15:39",
+    "ip": "172.16.0.78",
+    "event_type": "AUTH_FAILURE",
+    "message": "jan/03 21:15:39 system,error,critical login failure for user admin from 172.16.0.78 via winbox",
+    "severity": "MEDIUM"
+  },
+  {
+    "alert_type": "OFF_HOURS_ACTIVITY",
+    "timestamp": "1900-01-03T21:15:42",
+    "ip": "172.16.0.78",
+    "event_type": "AUTH_FAILURE",
+    "message": "jan/03 21:15:42 system,error,critical login failure for user admin from 172.16.0.78 via winbox",
+    "severity": "MEDIUM"
+  },
+  {
+    "alert_type": "OFF_HOURS_ACTIVITY",
+    "timestamp": "1900-01-03T21:15:44",
+    "ip": "172.16.0.78",
+    "event_type": "AUTH_FAILURE",
+    "message": "jan/03 21:15:44 system,error,critical login failure for user admin from 172.16.0.78 via winbox",
+    "severity": "MEDIUM"
+  },
+  {
+    "alert_type": "OFF_HOURS_ACTIVITY",
+    "timestamp": "1900-01-03T21:15:47",
+    "ip": "172.16.0.78",
+    "event_type": "AUTH_FAILURE",
+    "message": "jan/03 21:15:47 system,error,critical login failure for user admin from 172.16.0.78 via winbox",
+    "severity": "MEDIUM"
+  },
+  {
+    "alert_type": "OFF_HOURS_ACTIVITY",
+    "timestamp": "1900-01-03T21:15:51",
+    "ip": "172.16.0.78",
+    "event_type": "AUTH_FAILURE",
+    "message": "jan/03 21:15:51 system,error,critical login failure for user root from 172.16.0.78 via winbox",
+    "severity": "MEDIUM"
+  },
+  {
+    "alert_type": "OFF_HOURS_ACTIVITY",
+    "timestamp": "1900-01-03T21:15:52",
+    "ip": "172.16.0.78",
+    "event_type": "AUTH_FAILURE",
+    "message": "jan/03 21:15:52 system,error,critical login failure for user root from 172.16.0.78 via winbox",
+    "severity": "MEDIUM"
+  },
+  {
+    "alert_type": "OFF_HOURS_ACTIVITY",
+    "timestamp": "1900-01-03T21:15:52",
+    "ip": "172.16.0.78",
+    "event_type": "AUTH_FAILURE",
+    "message": "jan/03 21:15:52 system,error,critical login failure for user root from 172.16.0.78 via winbox",
+    "severity": "MEDIUM"
+  },
+  {
+    "alert_type": "OFF_HOURS_ACTIVITY",
+    "timestamp": "1900-01-03T21:15:53",
+    "ip": "172.16.0.78",
+    "event_type": "AUTH_FAILURE",
+    "message": "jan/03 21:15:53 system,error,critical login failure for user root from 172.16.0.78 via winbox",
+    "severity": "MEDIUM"
+  },
+  {
+    "alert_type": "OFF_HOURS_ACTIVITY",
+    "timestamp": "1900-01-03T21:15:54",
+    "ip": "172.16.0.78",
+    "event_type": "AUTH_FAILURE",
+    "message": "jan/03 21:15:54 system,error,critical login failure for user root from 172.16.0.78 via winbox",
+    "severity": "MEDIUM"
+  },
+  {
+    "alert_type": "OFF_HOURS_ACTIVITY",
+    "timestamp": "1900-01-03T21:15:57",
+    "ip": "172.16.0.78",
+    "event_type": "AUTH_FAILURE",
+    "message": "jan/03 21:15:57 system,error,critical login failure for user root from 172.16.0.78 via winbox",
+    "severity": "MEDIUM"
+  }
+]

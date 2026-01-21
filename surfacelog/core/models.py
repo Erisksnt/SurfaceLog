@@ -14,3 +14,11 @@ class Severity(str, Enum):
     LOW = "LOW"
     MEDIUM = "MEDIUM"
     HIGH = "HIGH"
+    CRITICAL = "CRITICAL"
+
+
+# Mapeamento de severidade por tipo de alerta
+ALERT_SEVERITY = {
+    "BRUTE_FORCE": Severity.CRITICAL,
+    "OFF_HOURS_ACTIVITY": Severity.MEDIUM,
+}

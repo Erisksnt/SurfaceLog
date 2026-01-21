@@ -11,3 +11,4 @@ class LogEvent:
     raw: str
     event_type: EventType = EventType.INFO
     severity: Severity = Severity.LOW
+    source_port: str = None

@@ -5,11 +5,15 @@ from .models import EventType, Severity
 def classify_event(event: LogEvent) -> LogEvent:
     message = event.message.lower()
 
-    if "failed password" in message or "authentication failure" in message or "denied" in message or "permission denied" or "login failure" in message:
+    if "failed password" in message or "authentication failure" in message or "denied" in message or "permission denied" in message or "login failure" in message:
         event.event_type = EventType.AUTH_FAILURE
         event.severity = Severity.HIGH
 
-    elif "accepted password" in message or "login successful" in message:
+    elif "accepted password" in message or "login successful" in message or "logged in" in message:
+        event.event_type = EventType.AUTH_SUCCESS
+        event.severity = Severity.LOW
+    
+    elif "logged out" in message:
         event.event_type = EventType.AUTH_SUCCESS
         event.severity = Severity.LOW
 
