@@ -6,7 +6,7 @@ from surfacelog.core.events import LogEvent
 # Jan 10 12:01:22
 # jan/01 20:03:35
 LOG_PATTERN = re.compile(
-    r'(?P<timestamp>\w{3}[\/\s]\d+\s[\d:]+).*?(?P<ip>\d+\.\d+\.\d+\.\d+).*?(?P<msg>.+)'
+    r'(?P<timestamp>\w{3}[\/\s]\d+\s[\d:]+)\s.+?:\s(?P<msg>.+)'
 )
 
 
@@ -22,10 +22,17 @@ def parse_line(line: str) -> LogEvent | None:
     except ValueError:
         return None
 
+    msg = match.group("msg")
+
+    # Extrai IP de dentro da mensagem
+    ip_match = re.search(r'(\d+\.\d+\.\d+\.\d+)', msg)
+    if not ip_match:
+        return None
+
     return LogEvent(
         timestamp=timestamp,
-        source_ip=match.group("ip"),
-        message=match.group("msg"),
+        source_ip=ip_match.group(1),
+        message=msg.lower(),
         raw=line.strip()
     )
 
