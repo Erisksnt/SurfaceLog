@@ -20,9 +20,9 @@ PATTERN_IP = re.compile(
     re.IGNORECASE
 )
 
-# Regex para extrair porta (procura "port XXXX")
+# Regex para extrair porta (procura "port XXXX" ou "via PROTOCOLO")
 PATTERN_PORT = re.compile(
-    r'port\s+(\d+)',
+    r'(?:port\s+(\d+)|via\s+(\w+))',
     re.IGNORECASE
 )
 
@@ -68,7 +68,9 @@ def parse_line(line: str) -> LogEvent | None:
     source_port = None
     match_port = PATTERN_PORT.search(line)
     if match_port:
-        source_port = match_port.group(1)
+        # Grupo 1: porta numérica (port XXXX)
+        # Grupo 2: protocolo (via PROTOCOLO)
+        source_port = match_port.group(1) or match_port.group(2)
 
     return LogEvent(
         timestamp=timestamp,

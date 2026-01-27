@@ -92,8 +92,8 @@ def print_alert(alert: dict):
     
     if alert['alert_type'] == 'BRUTE_FORCE':
         print(f"🌐 IP        : {alert['ip']}")
-        print(f"� Port      : {alert['port']}")
-        print(f"�🔢 Attempts : {alert['attempts']}")
+        print(f"🔌 Port      : {alert['port']}")
+        print(f"🔢 Attempts : {alert['attempts']}")
         print(f"⏱️ Window   : {alert['window_seconds']}s")
     elif alert['alert_type'] == 'OFF_HOURS_ACTIVITY':
         print(f"🌐 IP        : {alert['ip']}")
