@@ -2,7 +2,10 @@ from datetime import datetime
 import yaml
 from pathlib import Path
 from surfacelog.core.models import EventType, ALERT_SEVERITY
+from surfacelog.core.rules import load_rules
 
+
+rules = load_rules()
 
 def load_rules():
     """Carrega as regras de segurança do arquivo YAML"""

@@ -1,9 +1,15 @@
 from collections import defaultdict
 from datetime import timedelta
 from surfacelog.core.models import EventType, ALERT_SEVERITY
+from surfacelog.core.rules import load_rules
 
 
-def detect_bruteforce(events, threshold: int = 5, window_seconds: int = 60):
+def detect_bruteforce(events):
+    rules = load_rules()
+    bf_rules = rules.get("bruteforce", {})
+
+    threshold = bf_rules.get("max_attempts", 5)
+    window_seconds = bf_rules.get("window_seconds", 60)
     alerts = []
     failures_by_ip = defaultdict(list)
 
