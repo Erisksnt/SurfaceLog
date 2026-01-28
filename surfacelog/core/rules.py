@@ -8,7 +8,7 @@ def load_rules() -> dict:
     """
     rules_path = (
         Path(__file__).resolve()
-        .parent.parent / "reports" / "security.yaml"
+        .parent.parent / "rules" / "security.yaml"
     )
 
     with open(rules_path, "r", encoding="utf-8") as f:

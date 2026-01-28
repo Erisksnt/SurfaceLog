@@ -10,20 +10,18 @@ def analyze_log(file_path: str) -> Dict[str, list]:
     # 1️⃣ Parse
     events: List[LogEvent] = parse_log(file_path)
 
-    # 2️⃣ Classificação (in-place)
+    # 2️⃣ Classificação
+    classified_events: List[LogEvent] = []
     for event in events:
-        classify_event(event)
+        classified_events.append(classify_event(event))
 
-    # 3️⃣ Detecção de Brute Force
-    bruteforce_alerts = detect_bruteforce(events)
-    
-    # 4️⃣ Detecção de Atividades Fora do Horário
-    off_hours_alerts = detect_off_hours_activity(events)
-    
-    # Combinar todos os alertas
-    all_alerts = bruteforce_alerts + off_hours_alerts
+    # 3️⃣ Detecções
+    alerts = []
+
+    alerts.extend(detect_bruteforce(classified_events))
+    alerts.extend(detect_off_hours_activity(classified_events))
 
     return {
-        "events": events,
-        "alerts": all_alerts
+        "events": classified_events,
+        "alerts": alerts
     }
