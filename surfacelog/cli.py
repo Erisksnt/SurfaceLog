@@ -1,13 +1,21 @@
 import argparse
 import sys
+from datetime import datetime
 from pathlib import Path
 from surfacelog.core.analyzer import analyze_log
-from surfacelog.reports.csv_report import export_alerts_to_csv
+from surfacelog.reports.csv_report import export_alerts_to_csv, export_alerts_to_txt
 from surfacelog.reports.json_report import export_alerts_to_json
 
 # Criar pasta de extractions se não existir
 EXTRACTIONS_DIR = Path(__file__).parent.parent / "extractions"
 EXTRACTIONS_DIR.mkdir(exist_ok=True)
+
+
+def get_timestamp_filename(ext: str) -> str:
+    """Gera nome de arquivo com timestamp (data e hora)"""
+    now = datetime.now()
+    timestamp = now.strftime("%d-%m-%Y_%H-%M")
+    return f"{timestamp}.{ext}"
 
 
 def main():
@@ -35,30 +43,54 @@ def main():
         help="Show only detected security alerts"
     )
 
-    analyze_parser.add_argument(
-        "--export-csv",
-        type=str,
-        metavar="FILEPATH",
-        help="Export alerts to CSV file"
-    )
-
-    analyze_parser.add_argument(
-        "--export-json",
-        type=str,
-        metavar="FILEPATH",
-        help="Export alerts to JSON file"
-    )
-
     args = parser.parse_args()
 
     if args.command == "analyze":
-        run_analyze(args.logfile, args.alerts_only, args.export_csv, args.export_json)
+        run_analyze(args.logfile, args.alerts_only)
     else:
         parser.print_help()
         sys.exit(1)
 
 
-def run_analyze(logfile: str, alerts_only: bool, export_csv: str = None, export_json: str = None):
+def show_export_menu() -> list[str]:
+    """Mostra menu de opções de exportação e retorna os formatos selecionados"""
+    print("\n" + "="*50)
+    print("📊 OPÇÕES DE EXPORTAÇÃO")
+    print("="*50)
+    print("1️⃣  JSON")
+    print("2️⃣  CSV")
+    print("3️⃣  TXT")
+    print("4️⃣  JSON + CSV")
+    print("5️⃣  JSON + TXT")
+    print("6️⃣  CSV + TXT")
+    print("7️⃣  TODOS (JSON + CSV + TXT)")
+    print("0️⃣  NENHUM")
+    print("="*50)
+    
+    while True:
+        choice = input("\nEscolha uma opção (0-7): ").strip()
+        
+        if choice == "0":
+            return []
+        elif choice == "1":
+            return ["json"]
+        elif choice == "2":
+            return ["csv"]
+        elif choice == "3":
+            return ["txt"]
+        elif choice == "4":
+            return ["json", "csv"]
+        elif choice == "5":
+            return ["json", "txt"]
+        elif choice == "6":
+            return ["csv", "txt"]
+        elif choice == "7":
+            return ["json", "csv", "txt"]
+        else:
+            print("❌ Opção inválida! Tente novamente.")
+
+
+def run_analyze(logfile: str, alerts_only: bool):
     print(f"\n🔍 Analyzing log file: {logfile}\n")
 
     # 🔥 Analyzer faz parse + classify + detect
@@ -77,14 +109,28 @@ def run_analyze(logfile: str, alerts_only: bool, export_csv: str = None, export_
     else:
         print("\n✅ No critical alerts detected.")
 
-    # Exportar alertas se solicitado
-    if export_csv:
-        csv_path = EXTRACTIONS_DIR / export_csv
+    # Menu de exportação
+    export_formats = show_export_menu()
+    
+    if not export_formats:
+        print("\n👋 Nenhuma exportação selecionada.")
+        return
+    
+    # Exportar nos formatos selecionados
+    if "json" in export_formats:
+        json_filename = get_timestamp_filename("json")
+        json_path = EXTRACTIONS_DIR / json_filename
+        export_alerts_to_json(str(json_path), alerts)
+    
+    if "csv" in export_formats:
+        csv_filename = get_timestamp_filename("csv")
+        csv_path = EXTRACTIONS_DIR / csv_filename
         export_alerts_to_csv(str(csv_path), alerts)
     
-    if export_json:
-        json_path = EXTRACTIONS_DIR / export_json
-        export_alerts_to_json(str(json_path), alerts)
+    if "txt" in export_formats:
+        txt_filename = get_timestamp_filename("txt")
+        txt_path = EXTRACTIONS_DIR / txt_filename
+        export_alerts_to_txt(str(txt_path), alerts)
 
 def print_alert(alert: dict):
     print("────────────────────────────")
