@@ -1,0 +1,16 @@
+[
+  {
+    "id": "61d7f450-9bb0-48a3-b583-85e162c38f45",
+    "type": "BRUTE_FORCE",
+    "severity": "CRITICAL",
+    "timestamp": "1900-01-03T21:15:57",
+    "source": {
+      "ip": "172.16.0.78",
+      "port": "winbox"
+    },
+    "details": {
+      "attempts": 13,
+      "window_seconds": 60
+    }
+  }
+]

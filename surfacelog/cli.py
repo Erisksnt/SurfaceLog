@@ -88,22 +88,22 @@ def run_analyze(logfile: str, alerts_only: bool, export_csv: str = None, export_
 
 def print_alert(alert: dict):
     print("────────────────────────────")
-    print(f"🚨 Type      : {alert['alert_type']}")
+    print(f"🚨 Type      : {alert['type']}")
     
-    if alert['alert_type'] == 'BRUTE_FORCE':
-        print(f"🌐 IP        : {alert['ip']}")
-        print(f"🔌 Port      : {alert['port']}")
-        print(f"🔢 Attempts : {alert['attempts']}")
-        print(f"⏱️ Window   : {alert['window_seconds']}s")
-    elif alert['alert_type'] == 'OFF_HOURS_ACTIVITY':
-        print(f"🌐 IP        : {alert['ip']}")
+    if alert['type'] == 'BRUTE_FORCE':
+        print(f"🌐 IP        : {alert['source']['ip']}")
+        print(f"🔌 Port      : {alert['source']['port'] or 'unknown'}")
+        print(f"🔢 Attempts : {alert['details']['attempts']}")
+        print(f"⏱️ Window   : {alert['details']['window_seconds']}s")
+    elif alert['type'] == 'OFF_HOURS_ACTIVITY':
+        print(f"🌐 IP        : {alert['source']['ip'] or 'unknown'}")
         print(f"⏰ Time      : {alert['timestamp'].strftime('%H:%M:%S')}")
         # Normalizar event_type se for Enum
-        event_type = alert['event_type']
+        event_type = alert['details']['event_type']
         if hasattr(event_type, 'value'):
             event_type = event_type.value
         print(f"📝 Event     : {event_type}")
-        print(f"💬 Message   : {alert['message'][:50]}...")
+        print(f"💬 Message   : {alert['details']['message'][:50]}...")
     
     severity = alert['severity']
     # Converter Enum para string se necessário

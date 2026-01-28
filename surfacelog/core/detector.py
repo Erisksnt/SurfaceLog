@@ -1,40 +1,33 @@
 from collections import defaultdict
 from datetime import timedelta
+from uuid import uuid4
 from surfacelog.core.models import EventType, ALERT_SEVERITY
-from surfacelog.core.rules import load_rules
 
 
-def detect_bruteforce(events):
-    rules = load_rules()
-    bf_rules = rules.get("bruteforce", {})
-
-    threshold = bf_rules.get("max_attempts", 5)
-    window_seconds = bf_rules.get("window_seconds", 60)
+def detect_bruteforce(events, threshold: int = 5, window_seconds: int = 60):
     alerts = []
     failures_by_ip = defaultdict(list)
 
-    # Agrupa falhas por IP (descarta eventos sem IP ou timestamp)
+    # Agrupar falhas por IP
     for event in events:
-        # Proteção defensiva: validar timestamp e IP
         if not event.timestamp or not event.source_ip:
             continue
-        
+
         if event.event_type == EventType.AUTH_FAILURE:
             failures_by_ip[event.source_ip].append(event)
 
-    # Sliding window correto - encontra o máximo de tentativas em qualquer janela
     for ip, events_list in failures_by_ip.items():
-        timestamps = [event.timestamp for event in events_list]
+        timestamps = [e.timestamp for e in events_list]
         timestamps.sort()
-        max_attempts = 0
-        
+
         left = 0
+        max_attempts = 0
+
         for right in range(len(timestamps)):
             while timestamps[right] - timestamps[left] > timedelta(seconds=window_seconds):
                 left += 1
 
-            attempts = right - left + 1
-            max_attempts = max(max_attempts, attempts)
+            max_attempts = max(max_attempts, right - left + 1)
 
         if max_attempts >= threshold:
             # Coletar todos os portos/protocolos únicos usados
@@ -42,12 +35,18 @@ def detect_bruteforce(events):
             ports_str = ", ".join(sorted(ports))
             
             alerts.append({
-                "alert_type": "BRUTE_FORCE",
-                "ip": ip,
-                "port": ports_str,
-                "attempts": max_attempts,
-                "window_seconds": window_seconds,
-                "severity": ALERT_SEVERITY["BRUTE_FORCE"]
+                "id": str(uuid4()),
+                "type": "BRUTE_FORCE",
+                "severity": ALERT_SEVERITY["BRUTE_FORCE"],
+                "timestamp": timestamps[-1],
+                "source": {
+                    "ip": ip,
+                    "port": ports_str
+                },
+                "details": {
+                    "attempts": max_attempts,
+                    "window_seconds": window_seconds
+                }
             })
 
     return alerts
