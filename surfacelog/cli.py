@@ -132,26 +132,28 @@ def run_analyze(logfile: str, alerts_only: bool):
         txt_path = EXTRACTIONS_DIR / txt_filename
         export_alerts_to_txt(str(txt_path), alerts)
 
-def print_alert(alert: dict):
+def print_alert(alert):
     print("────────────────────────────")
-    print(f"🚨 Type      : {alert['type']}")
-    
-    if alert['type'] == 'BRUTE_FORCE':
-        print(f"🌐 IP        : {alert['source']['ip']}")
-        print(f"🔌 Port      : {alert['source']['port'] or 'unknown'}")
-        print(f"🔢 Attempts : {alert['details']['attempts']}")
-        print(f"⏱️ Window   : {alert['details']['window_seconds']}s")
-    elif alert['type'] == 'OFF_HOURS_ACTIVITY':
-        print(f"🌐 IP        : {alert['source']['ip'] or 'unknown'}")
-        print(f"⏰ Time      : {alert['timestamp'].strftime('%H:%M:%S')}")
-        # Normalizar event_type se for Enum
-        event_type = alert['details']['event_type']
+    print(f"🚨 Type      : {alert.type}")
+
+    if alert.type == 'BRUTE_FORCE':
+        print(f"🌐 IP        : {alert.source.ip}")
+        print(f"🔌 Port      : {alert.source.port or 'unknown'}")
+        print(f"🔢 Attempts : {alert.details['attempts']}")
+        print(f"⏱️ Window   : {alert.details['window_seconds']}s")
+
+    elif alert.type == 'OFF_HOURS_ACTIVITY':
+        print(f"🌐 IP        : {alert.source.ip or 'unknown'}")
+        print(f"⏰ Time      : {alert.timestamp.strftime('%H:%M:%S')}")
+
+        event_type = alert.details['event_type']
         if hasattr(event_type, 'value'):
             event_type = event_type.value
+
         print(f"📝 Event     : {event_type}")
-        print(f"💬 Message   : {alert['details']['message'][:50]}...")
+        print(f"💬 Message   : {alert.details['message'][:50]}...")
     
-    severity = alert['severity']
+    severity = alert.severity
     # Converter Enum para string se necessário
     if hasattr(severity, 'value'):
         severity = severity.value
