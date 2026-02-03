@@ -1,0 +1,8 @@
+────────────────────────────
+🚨 Type      : BRUTE_FORCE
+🌐 IP        : 172.16.0.78
+🔌 Port      : winbox
+🔢 Attempts : 13
+⏱️ Window   : 60s
+🔥 Severity : CRITICAL
+────────────────────────────

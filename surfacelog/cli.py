@@ -3,9 +3,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 from surfacelog.core.analyzer import analyze_log
-from surfacelog.reports.csv_report import export_alerts_to_csv
-from surfacelog.reports.json_report import export_alerts_to_json
-from surfacelog.reports.txt_report import export_alerts_to_txt
+from surfacelog.reports.registry import exporter
 
 # Criar pasta de extractions se não existir
 EXTRACTIONS_DIR = Path(__file__).parent.parent / "extractions"
@@ -118,16 +116,11 @@ def run_analyze(logfile: str, alerts_only: bool):
         return
     
     # Exportar nos formatos selecionados
-    EXPORTERS = {
-        "json": export_alerts_to_json,
-        "csv": export_alerts_to_csv,
-        "txt": export_alerts_to_txt,
-    }
     
     for fmt in export_formats:
         filename = get_timestamp_filename(fmt)
         path = EXTRACTIONS_DIR / filename
-        EXPORTERS[fmt](str(path), alerts)
+        exporter(fmt, str(path), alerts)
 
 def print_alert(alert):
     print("────────────────────────────")
