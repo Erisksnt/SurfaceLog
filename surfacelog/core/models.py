@@ -35,12 +35,13 @@ class NormalizedEvent:
     timestamp: datetime
 
     # origem do log
-    source: str               # ex: system, firewall, sshd
-    vendor: str               # ex: fortinet, linux
-    device_type: str          # ex: firewall, server, endpoint
+    source: str
+    vendor: str
+    device_type: str
 
     # classificação
     event_type: EventType
+    severity: Severity          # <- ADICIONADO
     action: str
 
     # identidade
@@ -48,9 +49,9 @@ class NormalizedEvent:
 
     # rede
     src_ip: Optional[str]
-    src_port: Optional[int]
+    src_port: Optional[int | str]   # <- AJUSTADO
     dst_ip: Optional[str]
-    dst_port: Optional[int]
+    dst_port: Optional[int | str]   # <- AJUSTADO
     protocol: Optional[str]
 
     # linha original
@@ -64,7 +65,7 @@ class NormalizedEvent:
 @dataclass(slots=True)
 class AlertSource:
     ip: Optional[str]
-    port: Optional[int]
+    port: Optional[int | str]   # <- manter consistente
 
 
 @dataclass(frozen=True, slots=True)
