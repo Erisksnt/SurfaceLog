@@ -1,0 +1,19 @@
+[
+  {
+    "id": "e65e4de1-7895-4efd-a57e-c581f6c4f0ca",
+    "type": "BRUTE_FORCE",
+    "severity": "CRITICAL",
+    "timestamp": "2026-01-03T21:15:57",
+    "source": {
+      "ip": "172.16.0.78",
+      "port": "winbox"
+    },
+    "summary": "Possible brute force detected from 172.16.0.78",
+    "details": {
+      "attempts": 13,
+      "window_seconds": 60
+    },
+    "related_events": null,
+    "tags": null
+  }
+]
