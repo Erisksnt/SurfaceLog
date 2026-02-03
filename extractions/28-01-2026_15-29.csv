@@ -1,2 +1,0 @@
-id,type,severity,timestamp,ip,port,event_type,attempts,window_seconds,message
-f370f15e-4d72-43cf-a540-cf8fd387bd2d,BRUTE_FORCE,CRITICAL,1900-01-03T21:15:57,172.16.0.78,winbox,,13,60,

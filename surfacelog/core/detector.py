@@ -1,6 +1,7 @@
 from collections import defaultdict
 from datetime import timedelta
 from uuid import uuid4
+from surfacelog.core.models import AlertSource
 
 from surfacelog.core.models import (
     Alert,
@@ -38,7 +39,7 @@ def detect_bruteforce(
             max_attempts = max(max_attempts, right - left + 1)
 
         if max_attempts >= threshold:
-            ports = {e.source_port or "unknown" for e in events_list}
+            first_port = next((e.source_port for e in events_list if e.source_port), None)
 
             alerts.append(
                 Alert(
@@ -48,13 +49,12 @@ def detect_bruteforce(
                     timestamp=timestamps[-1],
                     source=AlertSource(
                         ip=ip,
-                        port=None
+                        port=first_port
                     ),
                     summary=f"Possible brute force detected from {ip}",
                     details={
                         "attempts": max_attempts,
                         "window_seconds": window_seconds,
-                        "ports": sorted(ports),
                     },
                 )
             )

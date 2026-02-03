@@ -3,8 +3,9 @@ import sys
 from datetime import datetime
 from pathlib import Path
 from surfacelog.core.analyzer import analyze_log
-from surfacelog.reports.csv_report import export_alerts_to_csv, export_alerts_to_txt
+from surfacelog.reports.csv_report import export_alerts_to_csv
 from surfacelog.reports.json_report import export_alerts_to_json
+from surfacelog.reports.txt_report import export_alerts_to_txt
 
 # Criar pasta de extractions se não existir
 EXTRACTIONS_DIR = Path(__file__).parent.parent / "extractions"

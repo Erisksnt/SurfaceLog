@@ -1,6 +1,6 @@
 [
   {
-    "id": "f370f15e-4d72-43cf-a540-cf8fd387bd2d",
+    "id": "878eec9f-d3a1-4be8-b682-fab754c6e58c",
     "type": "BRUTE_FORCE",
     "severity": "CRITICAL",
     "timestamp": "1900-01-03T21:15:57",
@@ -8,9 +8,12 @@
       "ip": "172.16.0.78",
       "port": "winbox"
     },
+    "summary": "Possible brute force detected from 172.16.0.78",
     "details": {
       "attempts": 13,
       "window_seconds": 60
-    }
+    },
+    "related_events": null,
+    "tags": null
   }
 ]
