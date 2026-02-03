@@ -141,7 +141,10 @@ def print_alert(alert):
             event_type = event_type.value
 
         print(f"📝 Event     : {event_type}")
-        print(f"💬 Message   : {alert.details['message'][:50]}...")
+        if alert.details and "raw" in alert.details:
+            print(f"💬 Raw       : {alert.details['raw'][:80]}...")
+        
+    
     
     severity = alert.severity
     # Converter Enum para string se necessário

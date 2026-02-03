@@ -1,70 +1,61 @@
-# jan/ 3/2026 21:21:54 by RouterOS 6.49.13
-# software id = CA0A-PRBA
-#
-jan/03 14:47:04 system,error,critical router was rebooted without proper shutdown 
-jan/03 14:47:09 bridge,info "bridge1" mac address changed to E4:8D:8C:0D:D3:BA 
-jan/03 14:47:09 bridge,info "bridge2" mac address changed to E4:8D:8C:0D:D3:BC 
-jan/03 14:47:09 bridge,info hardware offloading activated on bridge "bridge1" ports: ether3,ether4,ether6,ether7 
-jan/03 14:47:09 bridge,info hardware offloading activated on bridge "bridge1" ports: ether8,ether9,ether10 
-jan/03 14:47:10 system,info mangle rule changed 
-jan/03 14:47:10 interface,info ether1 link up (speed 100M, full duplex) 
-jan/03 14:47:11 interface,info ether1 link down 
-jan/03 14:47:11 interface,info ether4 link up (speed 1G, full duplex) 
-jan/03 14:47:12 interface,info ether5 link up (speed 100M, full duplex) 
-jan/03 14:47:13 interface,info ether3 link up (speed 10M, full duplex) 
-jan/03 14:47:14 interface,info ether5 link down 
-jan/03 14:47:18 dhcp,info dhcp1 deassigned 172.16.3.253 from 00:31:92:11:B0:A3 
-jan/03 14:47:18 interface,info ether1 link up (speed 100M, full duplex) 
-jan/03 14:47:19 dhcp,info dhcp1 assigned 172.16.3.253 to 00:31:92:11:B0:A3 
-jan/03 14:47:30 system,info mangle rule changed 
-jan/03 14:47:39 interface,info ether5 link up (speed 100M, full duplex) 
-jan/03 14:47:40 interface,info ether2 link up (speed 1G, full duplex) 
-jan/03 14:47:44 dhcp,info dhcp-client on ether2 got IP address 192.168.1.2 
-jan/03 14:47:44 dhcp,info dhcp2 deassigned 172.17.3.254 from 04:18:D6:AC:73:7F 
-jan/03 14:47:44 dhcp,info dhcp2 assigned 172.17.3.254 to 04:18:D6:AC:73:7F 
-jan/03 14:47:56 dhcp,info dhcp2 deassigned 172.17.2.238 from C2:82:6D:93:36:CD 
-jan/03 14:47:56 dhcp,info dhcp2 assigned 172.17.2.238 to C2:82:6D:93:36:CD 
-jan/03 14:48:02 dhcp,info dhcp2 assigned 172.17.2.226 to 2E:62:B1:49:68:CE 
-jan/03 14:48:12 dhcp,info dhcp2 deassigned 172.17.2.226 from 2E:62:B1:49:68:CE 
-jan/03 14:48:13 dhcp,info dhcp2 assigned 172.17.2.226 to 2E:62:B1:49:68:CE 
-jan/03 14:53:38 interface,info ether2 link down 
-jan/03 14:53:38 dhcp,info dhcp-client on ether2 lost IP address 192.168.1.2 - lease stopped locally 
-jan/03 14:54:13 interface,info ether2 link up (speed 1G, full duplex) 
-jan/03 14:54:14 interface,info ether2 link down 
-jan/03 14:54:43 dhcp,info dhcp2 deassigned 172.17.3.248 from 74:13:EA:83:89:11 
-jan/03 14:54:44 dhcp,info dhcp2 assigned 172.17.3.248 to 74:13:EA:83:89:11 
-jan/03 14:55:07 interface,info ether2 link up (speed 1G, full duplex) 
-jan/03 14:55:10 dhcp,info dhcp-client on ether2 got IP address 192.168.1.2 
-jan/03 14:55:35 dhcp,info dhcp2 assigned 172.17.2.225 to D8:12:65:F8:5B:F9 
-jan/03 17:33:55 dhcp,info dhcp2 deassigned 172.17.2.226 from 2E:62:B1:49:68:CE 
-jan/03 17:37:30 dhcp,info dhcp2 deassigned 172.17.2.232 from 34:10:BE:98:8F:BC 
-jan/03 17:37:32 dhcp,info dhcp2 assigned 172.17.2.232 to 34:10:BE:98:8F:BC 
-jan/03 17:54:59 interface,info ether3 link down 
-jan/03 17:55:01 interface,info ether3 link up (speed 1G, full duplex) 
-jan/03 18:00:01 system,info mangle rule changed 
-jan/03 18:01:00 system,info mangle rule changed 
-jan/03 18:42:32 dhcp,info dhcp2 deassigned 172.17.2.238 from C2:82:6D:93:36:CD 
-jan/03 18:42:32 dhcp,info dhcp2 assigned 172.17.2.238 to C2:82:6D:93:36:CD 
-jan/03 20:06:00 system,info mangle rule changed 
-jan/03 20:06:30 system,info mangle rule changed 
-jan/03 21:15:36 system,error,critical login failure for user admin from 172.16.0.78 via winbox 
-jan/03 21:15:37 system,error,critical login failure for user admin from 172.16.0.78 via winbox 
-jan/03 21:15:38 system,error,critical login failure for user admin from 172.16.0.78 via winbox 
-jan/03 21:15:39 system,error,critical login failure for user admin from 172.16.0.78 via winbox 
-jan/03 21:15:42 system,error,critical login failure for user admin from 172.16.0.78 via winbox 
-jan/03 21:15:44 system,error,critical login failure for user admin from 172.16.0.78 via winbox 
-jan/03 21:15:47 system,error,critical login failure for user admin from 172.16.0.78 via winbox 
-jan/03 21:15:51 system,error,critical login failure for user root from 172.16.0.78 via winbox 
-jan/03 21:15:52 system,error,critical login failure for user root from 172.16.0.78 via winbox 
-jan/03 21:15:52 system,error,critical login failure for user root from 172.16.0.78 via winbox 
-jan/03 21:15:53 system,error,critical login failure for user root from 172.16.0.78 via winbox 
-jan/03 21:15:54 system,error,critical login failure for user root from 172.16.0.78 via winbox 
-jan/03 21:15:57 system,error,critical login failure for user root from 172.16.0.78 via winbox 
-jan/03 21:15:59 system,info,account user admin logged in from 172.16.0.78 via winbox 
-jan/03 21:16:03 system,info,account user admin logged in from 172.16.0.78 via telnet 
-jan/03 21:17:58 system,info,account user admin logged in from 172.16.0.78 via telnet 
-jan/03 21:18:06 system,info,account user admin logged out from 172.16.0.78 via telnet 
-jan/03 21:18:23 system,info,account user admin logged out from 172.16.0.78 via telnet 
-jan/03 21:20:02 system,info,account user admin logged in from 172.16.0.78 via telnet 
-jan/03 21:20:07 system,info,account user admin logged out from 172.16.0.78 via telnet 
-jan/03 21:21:51 system,info,account user admin logged in from 172.16.0.78 via telnet 
+# =========================
+# LINUX / SSH (normal noise)
+# =========================
+Jan 10 08:10:01 sshd Accepted password for erick from 192.168.1.10 port 55221
+Jan 10 08:12:14 sshd Failed password from 192.168.1.15 port 55310
+Jan 10 08:12:20 sshd Accepted password for erick from 192.168.1.15 port 55310
+Jan 10 08:14:33 systemd Started Session 55 of user root
+
+# =========================
+# FORTINET FIREWALL
+# =========================
+Jan 10 09:01:01 fortigate traffic allowed src=10.0.0.5 dst=8.8.8.8 proto=udp port 53
+Jan 10 09:01:05 fortigate traffic allowed src=10.0.0.5 dst=1.1.1.1 proto=tcp port 443
+Jan 10 09:02:10 fortigate denied connection from 45.33.12.9 port 445
+Jan 10 09:02:12 fortigate denied connection from 45.33.12.9 port 445
+
+# =========================
+# WINDOWS SECURITY LOG
+# =========================
+Jan 10 10:05:11 winlogon Login successful user=Administrator from 10.10.10.20
+Jan 10 10:07:21 winlogon Login failure user=Administrator from 10.10.10.20
+Jan 10 10:07:23 winlogon Login failure user=Administrator from 10.10.10.20
+
+# =========================
+# APACHE WEB (ruído normal)
+# =========================
+Jan 10 11:00:01 apache GET /index.html 200 from 172.16.0.5
+Jan 10 11:00:02 apache GET /favicon.ico 404 from 172.16.0.5
+Jan 10 11:00:05 apache warning slow request from 172.16.0.9
+
+# =========================
+# MIKROTIK (porta textual)
+# =========================
+Jan 10 11:20:10 mikrotik login failure from 201.55.10.8 via winbox
+Jan 10 11:20:12 mikrotik login failure from 201.55.10.8 via winbox
+Jan 10 11:20:14 mikrotik login failure from 201.55.10.8 via winbox
+Jan 10 11:20:16 mikrotik login failure from 201.55.10.8 via winbox
+Jan 10 11:20:18 mikrotik login failure from 201.55.10.8 via winbox
+
+# =========================
+# SSH BRUTE FORCE REAL
+# =========================
+Jan 10 12:01:01 sshd Failed password from 10.0.0.99 port 6001
+Jan 10 12:01:02 sshd Failed password from 10.0.0.99 port 6002
+Jan 10 12:01:03 sshd Failed password from 10.0.0.99 port 6003
+Jan 10 12:01:04 sshd Failed password from 10.0.0.99 port 6004
+Jan 10 12:01:05 sshd Failed password from 10.0.0.99 port 6005
+Jan 10 12:01:06 sshd Failed password from 10.0.0.99 port 6006
+
+# =========================
+# OFF HOURS suspicious
+# =========================
+Jan 10 02:10:01 sshd Failed password from 222.222.222.222 port 4444
+Jan 10 02:10:02 sshd Failed password from 222.222.222.222 port 4445
+
+# =========================
+# more noise
+# =========================
+Jan 10 13:30:01 systemd INFO cleanup completed
+Jan 10 13:35:22 kernel warning cpu temperature high
+Jan 10 13:40:01 sshd Accepted password for erick from 192.168.1.10 port 55222

@@ -1,0 +1,70 @@
+[
+  {
+    "id": "f2ac3b80-d125-4a48-8431-89a2f9545b3c",
+    "type": "BRUTE_FORCE",
+    "severity": "CRITICAL",
+    "timestamp": "2026-01-10T11:20:18",
+    "source": {
+      "ip": "201.55.10.8",
+      "port": "winbox"
+    },
+    "summary": "Possible brute force detected from 201.55.10.8",
+    "details": {
+      "attempts": 5,
+      "window_seconds": 60
+    },
+    "related_events": null,
+    "tags": null
+  },
+  {
+    "id": "e837c7a1-099a-4f53-9201-dbc89dd6b03c",
+    "type": "BRUTE_FORCE",
+    "severity": "CRITICAL",
+    "timestamp": "2026-01-10T12:01:06",
+    "source": {
+      "ip": "10.0.0.99",
+      "port": 6001
+    },
+    "summary": "Possible brute force detected from 10.0.0.99",
+    "details": {
+      "attempts": 6,
+      "window_seconds": 60
+    },
+    "related_events": null,
+    "tags": null
+  },
+  {
+    "id": "c64ab785-fdae-42da-b408-9185709fac89",
+    "type": "OFF_HOURS_ACTIVITY",
+    "severity": "MEDIUM",
+    "timestamp": "2026-01-10T02:10:01",
+    "source": {
+      "ip": "222.222.222.222",
+      "port": 4444
+    },
+    "summary": "Suspicious activity detected outside business hours",
+    "details": {
+      "event_type": "AUTH_FAILURE",
+      "raw": "Jan 10 02:10:01 sshd Failed password from 222.222.222.222 port 4444"
+    },
+    "related_events": null,
+    "tags": null
+  },
+  {
+    "id": "b96eb506-87a9-4244-a94f-7bb66ba0133e",
+    "type": "OFF_HOURS_ACTIVITY",
+    "severity": "MEDIUM",
+    "timestamp": "2026-01-10T02:10:02",
+    "source": {
+      "ip": "222.222.222.222",
+      "port": 4445
+    },
+    "summary": "Suspicious activity detected outside business hours",
+    "details": {
+      "event_type": "AUTH_FAILURE",
+      "raw": "Jan 10 02:10:02 sshd Failed password from 222.222.222.222 port 4445"
+    },
+    "related_events": null,
+    "tags": null
+  }
+]

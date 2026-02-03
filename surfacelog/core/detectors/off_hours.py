@@ -1,18 +1,15 @@
 from uuid import uuid4
+from datetime import datetime
 
 from surfacelog.core.models import (
     Alert,
     AlertSource,
     EventType,
     ALERT_SEVERITY,
+    NormalizedEvent,
 )
 from surfacelog.core.rules import load_rules, is_off_hours
 
-
-# =========================
-# CONFIG / CACHE
-# =========================
-RULES = load_rules()
 
 SUSPICIOUS_TYPES = {
     EventType.AUTH_FAILURE,
@@ -21,10 +18,8 @@ SUSPICIOUS_TYPES = {
 }
 
 
-# =========================
-# DETECTOR PADRÃO
-# =========================
-def detect(events) -> list[Alert]:
+def detect(events: list[NormalizedEvent]) -> list[Alert]:
+    rules = load_rules()
     alerts: list[Alert] = []
 
     for event in events:
@@ -33,7 +28,7 @@ def detect(events) -> list[Alert]:
 
         if (
             event.event_type in SUSPICIOUS_TYPES
-            and is_off_hours(event.timestamp, RULES)
+            and is_off_hours(event.timestamp, rules)
         ):
             alerts.append(
                 Alert(
@@ -43,16 +38,12 @@ def detect(events) -> list[Alert]:
                     timestamp=event.timestamp,
                     source=AlertSource(
                         ip=event.src_ip,
-                        port=None,
+                        port=event.src_port,
                     ),
                     summary="Suspicious activity detected outside business hours",
                     details={
-                        "event_type": (
-                            event.event_type.value
-                            if hasattr(event.event_type, "value")
-                            else event.event_type
-                        ),
-                        "message": event.message,
+                        "event_type": event.event_type.value,
+                        "raw": event.raw,  # ← substitui message
                     },
                 )
             )

@@ -1,0 +1,35 @@
+────────────────────────────
+🚨 Type      : BRUTE_FORCE
+🌐 IP        : 201.55.10.8
+🔌 Port      : winbox
+🔢 Attempts : 5
+⏱️ Window   : 60s
+🔥 Severity : CRITICAL
+────────────────────────────
+
+────────────────────────────
+🚨 Type      : BRUTE_FORCE
+🌐 IP        : 10.0.0.99
+🔌 Port      : 6001
+🔢 Attempts : 6
+⏱️ Window   : 60s
+🔥 Severity : CRITICAL
+────────────────────────────
+
+────────────────────────────
+🚨 Type      : OFF_HOURS_ACTIVITY
+🌐 IP        : 222.222.222.222
+🔌 Port      : 4444
+🔢 Attempts : N/A
+⏱️ Window   : N/As
+🔥 Severity : MEDIUM
+────────────────────────────
+
+────────────────────────────
+🚨 Type      : OFF_HOURS_ACTIVITY
+🌐 IP        : 222.222.222.222
+🔌 Port      : 4445
+🔢 Attempts : N/A
+⏱️ Window   : N/As
+🔥 Severity : MEDIUM
+────────────────────────────
