@@ -1,36 +1,59 @@
-from surfacelog.core.events import LogEvent
-from .models import EventType, Severity
+from surfacelog.core.models import (
+    EventType,
+    Severity,
+    NormalizedEvent,
+)
 
 
-def classify_event(event: LogEvent) -> LogEvent:
+def classify_event(event) -> NormalizedEvent:
     message = event.message.lower()
 
-    if "failed password" in message or "authentication failure" in message or "denied" in message or "permission denied" in message or "login failure" in message:
-        event.event_type = EventType.AUTH_FAILURE
-        event.severity = Severity.HIGH
+    event_type = EventType.INFO
+    severity = Severity.LOW
 
-    elif "accepted password" in message or "login successful" in message or "logged in" in message:
-        event.event_type = EventType.AUTH_SUCCESS
-        event.severity = Severity.LOW
-    
-    elif "logged out" in message:
-        event.event_type = EventType.AUTH_SUCCESS
-        event.severity = Severity.LOW
+    if any(x in message for x in (
+        "failed password",
+        "authentication failure",
+        "denied",
+        "permission denied",
+        "login failure",
+    )):
+        event_type = EventType.AUTH_FAILURE
+        severity = Severity.HIGH
+
+    elif any(x in message for x in (
+        "accepted password",
+        "login successful",
+        "logged in",
+        "logged out",
+    )):
+        event_type = EventType.AUTH_SUCCESS
+        severity = Severity.LOW
 
     elif "error" in message:
-        event.event_type = EventType.ERROR
-        event.severity = Severity.HIGH
+        event_type = EventType.ERROR
+        severity = Severity.HIGH
 
     elif "warning" in message:
-        event.event_type = EventType.WARNING
-        event.severity = Severity.MEDIUM
+        event_type = EventType.WARNING
+        severity = Severity.MEDIUM
 
     elif "unknown" in message:
-        event.event_type = EventType.UNKNOWN
-        event.severity = Severity.MEDIUM
+        event_type = EventType.UNKNOWN
+        severity = Severity.MEDIUM
 
-    else:
-        event.event_type = EventType.INFO
-        event.severity = Severity.LOW
-
-    return event
+    return NormalizedEvent(
+        timestamp=event.timestamp,
+        source="system",          # pode ajustar depois
+        vendor="unknown",
+        device_type="unknown",
+        event_type=event_type,
+        action="log",
+        username=None,
+        src_ip=event.source_ip,
+        src_port=event.source_port,
+        dst_ip=None,
+        dst_port=None,
+        protocol=None,
+        raw=event.raw,
+    )

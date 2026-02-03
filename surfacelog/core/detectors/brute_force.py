@@ -25,11 +25,11 @@ def detect(events) -> list[Alert]:
     failures_by_ip = defaultdict(list)
 
     for event in events:
-        if not event.timestamp or not event.source_ip:
+        if not event.timestamp or not event.src_ip:
             continue
 
         if event.event_type == EventType.AUTH_FAILURE:
-            failures_by_ip[event.source_ip].append(event)
+            failures_by_ip[event.src_ip].append(event)
 
     for ip, events_list in failures_by_ip.items():
         timestamps = sorted(e.timestamp for e in events_list)
@@ -44,9 +44,7 @@ def detect(events) -> list[Alert]:
 
         if max_attempts >= THRESHOLD:
             first_port = next(
-                (e.source_port for e in events_list if e.source_port),
-                None
-            )
+                (e.src_port for e in events_list if e.src_port),None)
 
             alerts.append(
                 Alert(

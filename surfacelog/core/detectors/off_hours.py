@@ -42,7 +42,7 @@ def detect(events) -> list[Alert]:
                     severity=ALERT_SEVERITY["OFF_HOURS_ACTIVITY"],
                     timestamp=event.timestamp,
                     source=AlertSource(
-                        ip=event.source_ip,
+                        ip=event.src_ip,
                         port=None,
                     ),
                     summary="Suspicious activity detected outside business hours",
