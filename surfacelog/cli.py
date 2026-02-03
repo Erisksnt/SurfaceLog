@@ -118,20 +118,16 @@ def run_analyze(logfile: str, alerts_only: bool):
         return
     
     # Exportar nos formatos selecionados
-    if "json" in export_formats:
-        json_filename = get_timestamp_filename("json")
-        json_path = EXTRACTIONS_DIR / json_filename
-        export_alerts_to_json(str(json_path), alerts)
+    EXPORTERS = {
+        "json": export_alerts_to_json,
+        "csv": export_alerts_to_csv,
+        "txt": export_alerts_to_txt,
+    }
     
-    if "csv" in export_formats:
-        csv_filename = get_timestamp_filename("csv")
-        csv_path = EXTRACTIONS_DIR / csv_filename
-        export_alerts_to_csv(str(csv_path), alerts)
-    
-    if "txt" in export_formats:
-        txt_filename = get_timestamp_filename("txt")
-        txt_path = EXTRACTIONS_DIR / txt_filename
-        export_alerts_to_txt(str(txt_path), alerts)
+    for fmt in export_formats:
+        filename = get_timestamp_filename(fmt)
+        path = EXTRACTIONS_DIR / filename
+        EXPORTERS[fmt](str(path), alerts)
 
 def print_alert(alert):
     print("────────────────────────────")
