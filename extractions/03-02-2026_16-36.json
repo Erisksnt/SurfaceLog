@@ -1,6 +1,6 @@
 [
   {
-    "id": "f2ac3b80-d125-4a48-8431-89a2f9545b3c",
+    "id": "237a218d-142d-4c11-81a7-7d75001ed4ce",
     "type": "BRUTE_FORCE",
     "severity": "CRITICAL",
     "timestamp": "2026-01-10T11:20:18",
@@ -17,7 +17,7 @@
     "tags": null
   },
   {
-    "id": "e837c7a1-099a-4f53-9201-dbc89dd6b03c",
+    "id": "20c072c1-1f0e-4160-a531-62b0c2802c68",
     "type": "BRUTE_FORCE",
     "severity": "CRITICAL",
     "timestamp": "2026-01-10T12:01:06",
@@ -34,7 +34,7 @@
     "tags": null
   },
   {
-    "id": "c64ab785-fdae-42da-b408-9185709fac89",
+    "id": "9ec36062-a1c1-4ddd-b6cb-ccd2d0e6fa55",
     "type": "OFF_HOURS_ACTIVITY",
     "severity": "MEDIUM",
     "timestamp": "2026-01-10T02:10:01",
@@ -51,7 +51,7 @@
     "tags": null
   },
   {
-    "id": "b96eb506-87a9-4244-a94f-7bb66ba0133e",
+    "id": "2faa7bf8-2c16-4ed4-a84c-a987cadcf2cf",
     "type": "OFF_HOURS_ACTIVITY",
     "severity": "MEDIUM",
     "timestamp": "2026-01-10T02:10:02",
