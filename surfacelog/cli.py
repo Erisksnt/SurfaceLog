@@ -4,96 +4,51 @@ from datetime import datetime
 from pathlib import Path
 from surfacelog.core.analyzer import analyze_log
 from surfacelog.reports.registry import exporter
+from collections import Counter
 
-# Criar pasta de extractions se não existir
+# =========================
+# CONFIGURAÇÕES
+# =========================
+SEVERITY_COLOR = {
+    "CRITICAL": "\033[91m",  # vermelho
+    "HIGH": "\033[31m",      # vermelho escuro
+    "MEDIUM": "\033[93m",    # amarelo
+    "LOW": "\033[92m",       # verde
+}
+RESET_COLOR = "\033[0m"
+
 EXTRACTIONS_DIR = Path(__file__).parent.parent / "extractions"
 EXTRACTIONS_DIR.mkdir(exist_ok=True)
 
-
+# =========================
+# UTILITÁRIOS
+# =========================
 def get_timestamp_filename(ext: str) -> str:
-    """Gera nome de arquivo com timestamp (data e hora)"""
     now = datetime.now()
     timestamp = now.strftime("%d-%m-%Y_%H-%M")
     return f"{timestamp}.{ext}"
 
-
-def main():
-    parser = argparse.ArgumentParser(
-        prog="surfacelog",
-        description="Security Log Analyzer"
-    )
-
-    subparsers = parser.add_subparsers(dest="command")
-
-    # analyze command
-    analyze_parser = subparsers.add_parser(
-        "analyze",
-        help="Analyze a log file"
-    )
-
-    analyze_parser.add_argument(
-        "logfile",
-        help="Path to log file (e.g. auth.log)"
-    )
-
-    analyze_parser.add_argument(
-        "--alerts-only",
-        action="store_true",
-        help="Show only detected security alerts"
-    )
-
-    analyze_parser.add_argument(
-        "--export",
-        nargs="+",
-        choices=["json", "csv", "txt"],
-        help="Export alerts directly without interactive menu"
-    )
-
-    args = parser.parse_args()
-
-    if args.command == "analyze":
-        run_analyze(args.logfile, args.alerts_only, args.export)
-    else:
-        parser.print_help()
-        sys.exit(1)
-
-
-def run_analyze(logfile: str, alerts_only: bool, export_formats: list[str] | None = None):
-    print(f"\n🔍 Analyzing log file: {logfile}\n")
-
-    # 🔥 Analyzer faz parse + classify + detect
-    result = analyze_log(logfile)
-
-    events = result["events"]
-    alerts = result["alerts"]
-
-    if not alerts_only:
-        print(f"📄 Events processed: {len(events)}")
-
-    if alerts:
-        print(f"\n🚨 SECURITY ALERTS ({len(alerts)})\n")
-        for alert in alerts:
-            print_alert(alert)
-    else:
-        print("\n✅ No critical alerts detected.")
-
-    # Menu de exportação só se export não foi passado
-    if export_formats is None:
-        export_formats = show_export_menu()
-
-    if not export_formats:
-        print("\n👋 Nenhuma exportação selecionada.")
+def print_alert_summary(alerts):
+    """Resumo por tipo de alerta com contagem e cores"""
+    if not alerts:
+        print("✅ No critical alerts detected.")
         return
 
-    # Exportar nos formatos selecionados
-    for fmt in export_formats:
-        filename = get_timestamp_filename(fmt)
-        path = EXTRACTIONS_DIR / filename
-        exporter(fmt, str(path), alerts)
+    counter = Counter(alert.type for alert in alerts)
+    print("\n📊 ALERT SUMMARY\n")
+    for alert_type, count in counter.items():
+        # Pega a cor baseada no maior nível de severidade daquele tipo
+        max_sev = max(
+            (alert.severity.value if hasattr(alert.severity, 'value') else alert.severity)
+            for alert in alerts if alert.type == alert_type
+        )
+        color = SEVERITY_COLOR.get(max_sev, "")
+        print(f"{color}{alert_type:<20} {count}{RESET_COLOR}")
 
-
+# =========================
+# MENU DE EXPORTAÇÃO
+# =========================
 def show_export_menu() -> list[str]:
-    """Mostra menu de opções de exportação e retorna os formatos selecionados"""
     print("\n" + "="*50)
     print("📊 OPÇÕES DE EXPORTAÇÃO")
     print("="*50)
@@ -109,7 +64,6 @@ def show_export_menu() -> list[str]:
 
     while True:
         choice = input("\nEscolha uma opção (0-7): ").strip()
-
         if choice == "0":
             return []
         elif choice == "1":
@@ -129,7 +83,9 @@ def show_export_menu() -> list[str]:
         else:
             print("❌ Opção inválida! Tente novamente.")
 
-
+# =========================
+# ALERT DISPLAY
+# =========================
 def print_alert(alert):
     print("────────────────────────────")
     print(f"🚨 Type      : {alert.type}")
@@ -143,23 +99,89 @@ def print_alert(alert):
     elif alert.type == 'OFF_HOURS_ACTIVITY':
         print(f"🌐 IP        : {alert.source.ip or 'unknown'}")
         print(f"⏰ Time      : {alert.timestamp.strftime('%H:%M:%S')}")
-
         event_type = alert.details.get('event_type', 'unknown')
         if hasattr(event_type, 'value'):
             event_type = event_type.value
-
         print(f"📝 Event     : {event_type}")
         if alert.details and "raw" in alert.details:
             print(f"💬 Raw       : {alert.details['raw'][:80]}...")
 
     severity = alert.severity
-    # Converter Enum para string se necessário
     if hasattr(severity, 'value'):
         severity = severity.value
-
-    print(f"🔥 Severity : {severity}")
+    color = SEVERITY_COLOR.get(severity, "")
+    print(f"🔥 Severity : {color}{severity}{RESET_COLOR}")
     print("────────────────────────────\n")
 
+# =========================
+# RUN ANALYZE
+# =========================
+def run_analyze(logfile: str, alerts_only: bool, export_formats: list[str] | None = None):
+    print(f"\n🔍 Analyzing log file: {logfile}\n")
+    result = analyze_log(logfile)
+
+    events = result["events"]
+    alerts = result["alerts"]
+
+    if not alerts_only:
+        print(f"📄 Events processed: {len(events)}")
+
+    for alert in alerts:
+        print_alert(alert)
+
+    print_alert_summary(alerts)
+
+    # Menu só se export não for passado
+    if export_formats is None:
+        export_formats = show_export_menu()
+
+    if not export_formats:
+        print("\n👋 Nenhuma exportação selecionada.")
+        return
+
+    for fmt in export_formats:
+        filename = get_timestamp_filename(fmt)
+        path = EXTRACTIONS_DIR / filename
+        exporter(fmt, str(path), alerts)
+        
+# =========================
+# MAIN CLI
+# =========================
+def main():
+    parser = argparse.ArgumentParser(
+        prog="surfacelog",
+        description="Security Log Analyzer"
+    )
+
+    subparsers = parser.add_subparsers(dest="command")
+
+    analyze_parser = subparsers.add_parser(
+        "analyze",
+        help="Analyze a log file"
+    )
+    analyze_parser.add_argument(
+        "logfile",
+        help="Path to log file (e.g. auth.log)"
+    )
+    analyze_parser.add_argument(
+        "--alerts-only",
+        action="store_true",
+        help="Show only detected security alerts"
+    )
+    analyze_parser.add_argument(
+        "--export",
+        nargs="+",
+        choices=["json", "csv", "txt"],
+        help="Export alerts directly without interactive menu"
+    )
+
+    args = parser.parse_args()
+
+    if args.command == "analyze":
+        run_analyze(args.logfile, args.alerts_only, args.export)
+    else:
+        parser.print_help()
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
