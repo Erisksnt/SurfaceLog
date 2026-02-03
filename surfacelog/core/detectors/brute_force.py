@@ -1,7 +1,6 @@
 from collections import defaultdict
 from datetime import timedelta
 from uuid import uuid4
-from surfacelog.core.models import AlertSource
 
 from surfacelog.core.models import (
     Alert,
@@ -11,15 +10,20 @@ from surfacelog.core.models import (
 )
 
 
-def detect_bruteforce(
-    events,
-    threshold: int = 5,
-    window_seconds: int = 60
-) -> list[Alert]:
+# =========================
+# CONFIG (privado do detector)
+# =========================
+THRESHOLD = 5
+WINDOW_SECONDS = 60
+
+
+# =========================
+# DETECTOR (API padrão)
+# =========================
+def detect(events) -> list[Alert]:
     alerts: list[Alert] = []
     failures_by_ip = defaultdict(list)
 
-    # Agrupar falhas de autenticação por IP
     for event in events:
         if not event.timestamp or not event.source_ip:
             continue
@@ -34,12 +38,15 @@ def detect_bruteforce(
         max_attempts = 0
 
         for right in range(len(timestamps)):
-            while timestamps[right] - timestamps[left] > timedelta(seconds=window_seconds):
+            while timestamps[right] - timestamps[left] > timedelta(seconds=WINDOW_SECONDS):
                 left += 1
             max_attempts = max(max_attempts, right - left + 1)
 
-        if max_attempts >= threshold:
-            first_port = next((e.source_port for e in events_list if e.source_port), None)
+        if max_attempts >= THRESHOLD:
+            first_port = next(
+                (e.source_port for e in events_list if e.source_port),
+                None
+            )
 
             alerts.append(
                 Alert(
@@ -47,14 +54,11 @@ def detect_bruteforce(
                     type="BRUTE_FORCE",
                     severity=ALERT_SEVERITY["BRUTE_FORCE"],
                     timestamp=timestamps[-1],
-                    source=AlertSource(
-                        ip=ip,
-                        port=first_port
-                    ),
+                    source=AlertSource(ip=ip, port=first_port),
                     summary=f"Possible brute force detected from {ip}",
                     details={
                         "attempts": max_attempts,
-                        "window_seconds": window_seconds,
+                        "window_seconds": WINDOW_SECONDS,
                     },
                 )
             )

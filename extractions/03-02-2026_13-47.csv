@@ -1,2 +1,0 @@
-id,type,severity,timestamp,source_ip,source_ports,summary
-b6ed8d7e-c162-460e-a918-64d175c87c68,BRUTE_FORCE,CRITICAL,1900-01-03T21:15:57,172.16.0.78,winbox,Possible brute force detected from 172.16.0.78
