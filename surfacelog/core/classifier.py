@@ -1,50 +1,54 @@
-from surfacelog.core.models import (
-    EventType,
-    Severity,
-    NormalizedEvent,
+from surfacelog.core.parser import LogEvent
+from surfacelog.core.models import (EventType,NormalizedEvent)
+
+
+AUTH_FAILURE_PATTERNS = (
+    "failed password",
+    "authentication failure",
+    "denied",
+    "permission denied",
+    "login failure",
+)
+
+AUTH_SUCCESS_PATTERNS = (
+    "accepted password",
+    "login successful",
+    "logged in",
+    "logged out",
 )
 
 
-def classify_event(event) -> NormalizedEvent:
+def classify_event(event: LogEvent) -> NormalizedEvent:
     message = event.message.lower()
 
     event_type = EventType.INFO
-    severity = Severity.LOW
 
-    if any(x in message for x in (
-        "failed password",
-        "authentication failure",
-        "denied",
-        "permission denied",
-        "login failure",
-    )):
+    # =========================
+    # CLASSIFICAÇÃO SEMÂNTICA
+    # =========================
+
+    if any(p in message for p in AUTH_FAILURE_PATTERNS):
         event_type = EventType.AUTH_FAILURE
-        severity = Severity.HIGH
 
-    elif any(x in message for x in (
-        "accepted password",
-        "login successful",
-        "logged in",
-        "logged out",
-    )):
+    elif any(p in message for p in AUTH_SUCCESS_PATTERNS):
         event_type = EventType.AUTH_SUCCESS
-        severity = Severity.LOW
 
     elif "error" in message:
         event_type = EventType.ERROR
-        severity = Severity.HIGH
 
     elif "warning" in message:
         event_type = EventType.WARNING
-        severity = Severity.MEDIUM
 
     elif "unknown" in message:
         event_type = EventType.UNKNOWN
-        severity = Severity.MEDIUM
+
+    # =========================
+    # NORMALIZAÇÃO CANÔNICA
+    # =========================
 
     return NormalizedEvent(
         timestamp=event.timestamp,
-        source="system",          # pode ajustar depois
+        source="auth.log",
         vendor="unknown",
         device_type="unknown",
         event_type=event_type,
