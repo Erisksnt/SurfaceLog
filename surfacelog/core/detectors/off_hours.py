@@ -1,6 +1,5 @@
 from uuid import uuid4
 from datetime import datetime
-
 from surfacelog.core.models import (
     Alert,
     AlertSource,
@@ -43,7 +42,7 @@ def detect(events: list[NormalizedEvent]) -> list[Alert]:
                     summary="Suspicious activity detected outside business hours",
                     details={
                         "event_type": event.event_type.value,
-                        "raw": event.raw,  # ← substitui message
+                        "raw": event.raw,  
                     },
                 )
             )

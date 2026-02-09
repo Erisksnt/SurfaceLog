@@ -61,19 +61,13 @@ def classify_event(event: LogEvent) -> NormalizedEvent:
         source="auth.log",
         vendor="linux",
         device_type="server",
-
-        event_type=event_type,
-        severity=severity,   # <- OBRIGATÓRIO AGORA
-
+        event_type=event_type, 
         action="log",
-
         username=None,
-
         src_ip=event.source_ip,
         src_port=event.source_port,
         dst_ip=None,
         dst_port=None,
         protocol=None,
-
         raw=event.raw,
     )

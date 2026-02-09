@@ -1,5 +1,5 @@
 import yaml
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 
@@ -16,14 +16,35 @@ def load_rules() -> dict:
         return yaml.safe_load(f)
 
 
+def is_bruteforce(timestamps, rule: dict) -> tuple[bool, int]:
+    """
+    Recebe lista de timestamps ordenados.
+    Retorna (is_detected, attempts)
+    """
+
+    threshold = rule["max_attempts"]
+    window_seconds = rule["window_seconds"]
+
+    left = 0
+    max_attempts = 0
+
+    for right in range(len(timestamps)):
+        while timestamps[right] - timestamps[left] > timedelta(seconds=window_seconds):
+            left += 1
+
+        max_attempts = max(max_attempts, right - left + 1)
+
+    return max_attempts >= threshold, max_attempts
+
+
 def is_off_hours(timestamp: datetime, rules: dict = None) -> bool:
     
     if rules is None:
         rules = load_rules()
     
     off_hours_config = rules.get("off_hours", {})
-    start_time_str = off_hours_config.get("start", "00:00")
-    end_time_str = off_hours_config.get("end", "06:00")
+    start_time_str = off_hours_config.get("start")
+    end_time_str = off_hours_config.get("end")
     
     # Converter strings para time objects
     start_time = datetime.strptime(start_time_str, "%H:%M").time()
@@ -36,6 +57,5 @@ def is_off_hours(timestamp: datetime, rules: dict = None) -> bool:
         return start_time <= current_time < end_time
     
     # Se start > end
-    # Ex: 22:00 a 06:00 significa após 22:00 OU antes de 06:00
     else:
         return current_time >= start_time or current_time < end_time

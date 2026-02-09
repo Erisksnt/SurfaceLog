@@ -1,0 +1,10 @@
+[project]
+name = "surfacelog"
+version = "0.1.0"
+description = "Mini SIEM log analyzer"
+authors = [{name="Erick"}]
+requires-python = ">=3.10"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["surfacelog*"]

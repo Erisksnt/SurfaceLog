@@ -26,46 +26,36 @@ class Severity(str, Enum):
 
 
 # ======================================================
-# EVENTO NORMALIZADO (contrato principal do pipeline)
+#               EVENTO NORMALIZADO 
 # Parser → Classifier → Analyzer → Detector
 # ======================================================
 
 @dataclass(slots=True)
 class NormalizedEvent:
     timestamp: datetime
-
-    # origem do log
     source: str
     vendor: str
     device_type: str
-
-    # classificação
     event_type: EventType
-    severity: Severity          # <- ADICIONADO
     action: str
-
-    # identidade
     username: Optional[str]
-
-    # rede
     src_ip: Optional[str]
-    src_port: Optional[int | str]   # <- AJUSTADO
+    src_port: Optional[int | str]
     dst_ip: Optional[str]
-    dst_port: Optional[int | str]   # <- AJUSTADO
+    dst_port: Optional[int | str]
     protocol: Optional[str]
-
-    # linha original
     raw: str
 
 
+
 # ======================================================
-# ALERTAS (saída do detector/analyzer)
+#                       ALERTAS 
 # ======================================================
 
 @dataclass(slots=True)
 class AlertSource:
     ip: Optional[str]
-    port: Optional[int | str]   # <- manter consistente
+    port: Optional[int | str]   
 
 
 @dataclass(frozen=True, slots=True)
@@ -75,7 +65,6 @@ class Alert:
     severity: Severity
     timestamp: datetime
     source: AlertSource
-
     summary: str
     details: Optional[Dict[str, Any]] = None
     related_events: Optional[List[str]] = None

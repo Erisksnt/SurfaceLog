@@ -1,20 +1,12 @@
 from collections import defaultdict
 from datetime import timedelta
 from uuid import uuid4
-
-from surfacelog.core.models import (
-    Alert,
-    AlertSource,
-    EventType,
-    ALERT_SEVERITY,
-)
+from surfacelog.core.rules import load_rules, is_bruteforce
+from surfacelog.core.models import (Alert,AlertSource,EventType,ALERT_SEVERITY,)
 
 
-# =========================
-# CONFIG (privado do detector)
-# =========================
-THRESHOLD = 5
-WINDOW_SECONDS = 60
+rules = load_rules()
+brute_rule = rules["bruteforce"]
 
 
 # =========================
@@ -33,19 +25,12 @@ def detect(events) -> list[Alert]:
 
     for ip, events_list in failures_by_ip.items():
         timestamps = sorted(e.timestamp for e in events_list)
-
-        left = 0
-        max_attempts = 0
-
-        for right in range(len(timestamps)):
-            while timestamps[right] - timestamps[left] > timedelta(seconds=WINDOW_SECONDS):
-                left += 1
-            max_attempts = max(max_attempts, right - left + 1)
-
-        if max_attempts >= THRESHOLD:
-            first_port = next(
-                (e.src_port for e in events_list if e.src_port),None)
-
+    
+        detected, attempts = is_bruteforce(timestamps, brute_rule)
+    
+        if detected:
+            first_port = next((e.src_port for e in events_list if e.src_port), None)
+    
             alerts.append(
                 Alert(
                     id=str(uuid4()),
@@ -55,10 +40,10 @@ def detect(events) -> list[Alert]:
                     source=AlertSource(ip=ip, port=first_port),
                     summary=f"Possible brute force detected from {ip}",
                     details={
-                        "attempts": max_attempts,
-                        "window_seconds": WINDOW_SECONDS,
+                        "attempts": attempts,
+                        "window_seconds": brute_rule["window_seconds"],
                     },
                 )
             )
-
+    
     return alerts

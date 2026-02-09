@@ -37,15 +37,10 @@ PATTERN_IP = re.compile(
     re.IGNORECASE
 )
 
-# aceita:
-# port 22
-# via winbox
-# via ssh
 PATTERN_PORT = re.compile(
     r'(?:port\s+(\d+)|via\s+(\w+))',
     re.IGNORECASE
 )
-
 
 # =========================
 # PARSE LINE
@@ -61,19 +56,19 @@ def parse_line(line: str) -> LogEvent | None:
     timestamp = None
 
     # ---------------------------------
-    # timestamp com data (corrige ANO)
+    #       timestamp com data
     # ---------------------------------
     match_date = PATTERN_WITH_DATE.search(line)
     if match_date:
         raw_ts = match_date.group("ts").replace("/", " ")
         try:
-            parsed = datetime.strptime(raw_ts, "%b %d %H:%M:%S")
-            timestamp = parsed.replace(year=datetime.now().year)  # <- FIX crítico
+            year = datetime.now().year
+            timestamp = datetime.strptime(f"{year} {raw_ts}", "%Y %b %d %H:%M:%S")
         except ValueError:
             pass
 
     # ---------------------------------
-    # timestamp só hora (usa hoje)
+    # timestamp só hora 
     # ---------------------------------
     if not timestamp:
         match_time = PATTERN_TIME_ONLY.search(line)
