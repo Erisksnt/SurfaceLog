@@ -1,5 +1,4 @@
 from typing import Dict, List
-
 from surfacelog.core.parser import parse_log
 from surfacelog.core.classifier import classify_event
 from surfacelog.core.detectors.registry import run_detectors

@@ -1,9 +1,5 @@
 from surfacelog.core.parser import LogEvent
-from surfacelog.core.models import (
-    EventType,
-    Severity,
-    NormalizedEvent,
-)
+from surfacelog.core.models import (EventType,Severity,NormalizedEvent)
 
 
 AUTH_FAILURE_PATTERNS = (
