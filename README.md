@@ -1,6 +1,9 @@
 # SurfaceLog
 
-SurfaceLog é um analisador de logs de segurança focado em **normalização de eventos**. O core do projeto trabalha com **um único modelo canônico**, independente de vendor, formato de log ou tecnologia. Isso garante que detecções e relatórios sejam consistentes, mesmo com fontes heterogêneas.
+SurfaceLog é um **mini-SIEM e rule-based** focado em normalização de eventos, detecção configurável e geração de alertas estruturados.
+
+O core trabalha com **um único modelo canônico de evento**, independente de vendor ou formato de log, permitindo que detectores operem de forma consistente sobre qualquer fonte.
+
 
 ## Princípios do core
 
@@ -9,28 +12,80 @@ SurfaceLog é um analisador de logs de segurança focado em **normalização de 
 - **Parsers** têm a obrigação de produzir esse modelo.
 - **Detectores** não interpretam logs, apenas eventos normalizados.
 
+## Features
+
+- Modelo de evento canônico (vendor-agnostic)
+- Pipeline parse → classify → detect
+- Detectores configuráveis via YAML (rule engine)
+- Alertas estruturados com severidade
+- CLI simples
+- Exportação JSON / CSV / TXT
+- Testes automatizados (pytest)
+
 ## Estrutura do projeto
 
 ```
 SurfaceLog/
 ├── examples/                     # Logs de exemplo
-├── extractions/                  # Exportações (JSON/CSV/TXT)
+├── extractions/                  # Exportações geradas (JSON/CSV/TXT)
 ├── surfacelog/
-│   ├── __main__.py               # Ponto de entrada do CLI
+│   ├── __main__.py               # Ponto de entrada do CLI (python -m surfacelog)
 │   ├── cli.py                    # Interface de linha de comando
 │   ├── core/
-│   │   ├── analyzer.py           # Pipeline (parse -> normalize -> detect)
-│   │   ├── classifier.py         # Classificação semântica
+│   │   ├── analyzer.py           # Pipeline principal de análise
+│   │   ├── classifier.py         # Classificação de eventos
 │   │   ├── detectors/            # Detectores de segurança
-│   │   ├── models.py             # Modelos canônicos (eventos/alertas)
+│   │   ├── models.py             # Modelos de domínio (eventos/alertas)
 │   │   ├── parser.py             # Parser de logs
-│   │   └── rules.py              # Regras carregadas de YAML
-│   ├── reports/                  # Exportadores (JSON/CSV/TXT)
+│   │   └── rules.py              # Carregamento/aplicação de regras
+│   ├── reports/
+│   │   ├── csv_report.py         # Exportação CSV
+│   │   ├── json_report.py        # Exportação JSON
+│   │   └── txt_report.py         # Exportação TXT
 │   └── rules/
 │       └── security.yaml         # Regras de segurança
-├── requirements.txt              # Dependências (PyYAML)
+├── tests/
+│   ├── test_classifier.py
+│   ├── test_detectors.py
+│   └── test_parser.py
+├── pyproject.toml                # Configuração do projeto/pacote
+├── requirements.txt              # Dependências Python
 └── README.md
 ```
+
+## Arquitetura
+
+O SurfaceLog segue uma arquitetura em pipeline desacoplado:
+
+Log Source
+   ↓
+Parser
+   ↓
+NormalizedEvent (modelo canônico)
+   ↓
+Classifier
+   ↓
+Detectors (rule engine YAML)
+   ↓
+Alerts
+   ↓
+Exporters (JSON / CSV / TXT)
+
+### Componentes
+
+- **Parser**: converte logs brutos em eventos básicos
+- **Classifier**: normaliza para o modelo canônico
+- **Detectors**: aplicam regras de segurança
+- **Reports/Exporters**: geram saídas estruturadas
+- **CLI**: orquestra o fluxo end-to-end
+
+### Princípios arquiteturais
+
+- Vendor-agnostic
+- Event normalization first
+- Detectores desacoplados de parsing
+- Regras externas (configuração > código)
+- Extensível via novos parsers/detectores
 
 ## Instalação
 
@@ -39,6 +94,8 @@ SurfaceLog/
 
 ```bash
 pip install -r requirements.txt
+pip install -e .
+
 ```
 
 ## Como funciona (pipeline)
@@ -55,13 +112,19 @@ O CLI está disponível via módulo:
 python -m surfacelog analyze <caminho-do-log>
 ```
 
-### Exemplos
-
-Analisar o log de exemplo:
+### Quick start
 
 ```bash
-python -m surfacelog analyze examples/auth.log
+python -m surfacelog analyze examples/auth.log --export json
 ```
+
+##Saida
+
+📄 Events processed: 30
+🚨 SECURITY ALERTS (4)
+📊 ALERT SUMMARY
+BRUTE_FORCE           2
+OFF_HOURS_ACTIVITY    2
 
 Mostrar apenas alertas:
 
@@ -85,24 +148,28 @@ O SurfaceLog exporta alertas em:
 
 Os arquivos são gravados em `extractions/` com timestamp automático no nome.
 
-## Regras de segurança
+## Regras de segurança (Rule Engine)
 
-As regras ficam em `surfacelog/rules/security.yaml`.
+As detecções são **configuradas externamente** via:
 
-Exemplo (off-hours):
+surfacelog/rules/security.yaml
+
+Exemplo:
 
 ```yaml
+bruteforce:
+  max_attempts: 5
+  window_seconds: 60
+
 off_hours:
   start: "22:00"
   end: "06:00"
 ```
 
-> **Nota:** o detector de brute force atualmente usa valores internos para janela e tentativas. As chaves `bruteforce` no YAML estão prontas para futuras integrações.
-
 ## Detectores incluídos
 
-- **Brute Force**: identifica múltiplas falhas de autenticação em uma janela curta.
-- **Off-hours Activity**: alerta acessos suspeitos fora do horário configurado.
+- **Brute Force**: múltiplas falhas de autenticação dentro de uma janela temporal configurável
+- **Off-hours Activity**: eventos sensíveis fora do horário permitido
 
 ## Modelo canônico (resumo)
 
@@ -114,11 +181,19 @@ O evento normalizado (`NormalizedEvent`) inclui:
 - Rede (src_ip, src_port, dst_ip, dst_port, protocol)
 - Linha raw original
 
+## .gitignore
+Os seguintes diretórios são ignorados:
+- `.venv/` - Ambiente virtual Python
+- `*.egg-info/` - Metadados do pacote
+- `__pycache__/` - Cache Python
+- `.pytest_cache/` - Cache do pytest
+
 ## Próximos passos (ideias)
 
-- Conectar `security.yaml` ao detector de brute force.
-- Adicionar mais parsers por vendor.
-- Adicionar novos detectores baseados em regras.
+- Novos detectores (port scan, login success after failure, lateral movement)
+- Streaming/real-time mode
+- Dashboard web simples
+- Sistema de plugins para detectores
 
 ---
 
