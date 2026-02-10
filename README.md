@@ -1,8 +1,16 @@
+![Python](https://img.shields.io/badge/python-3.10+-blue)
+![Tests](https://img.shields.io/badge/tests-pytest-green)
+![License](https://img.shields.io/badge/license-MIT-lightgrey)
+
 # SurfaceLog
 
 SurfaceLog é um **mini-SIEM e rule-based** focado em normalização de eventos, detecção configurável e geração de alertas estruturados.
 
 O core trabalha com **um único modelo canônico de evento**, independente de vendor ou formato de log, permitindo que detectores operem de forma consistente sobre qualquer fonte.
+
+## Objetivo
+
+Fornecer um mecanismo leve, extensível e vendor-agnostic para análise de logs de segurança, permitindo detectar comportamentos suspeitos de forma padronizada, rápida e automatizável, sem dependência de soluções SIEM complexas ou proprietárias.
 
 
 ## Princípios do core
@@ -57,19 +65,7 @@ SurfaceLog/
 
 O SurfaceLog segue uma arquitetura em pipeline desacoplado:
 
-Log Source
-   ↓
-Parser
-   ↓
-NormalizedEvent (modelo canônico)
-   ↓
-Classifier
-   ↓
-Detectors (rule engine YAML)
-   ↓
-Alerts
-   ↓
-Exporters (JSON / CSV / TXT)
+Log → Parser → NormalizedEvent → Classifier → Detectors → Alerts → Exporters
 
 ### Componentes
 
@@ -98,6 +94,9 @@ pip install -e .
 
 ```
 
+O projeto usa pytest para testes e ignora automaticamente artefatos de build, cache e ambientes virtuais via .gitignore.
+
+
 ## Como funciona (pipeline)
 
 1. **Parse**: o parser converte cada linha de log em um `LogEvent` básico (timestamp, IP, porta, mensagem, raw).
@@ -118,7 +117,7 @@ python -m surfacelog analyze <caminho-do-log>
 python -m surfacelog analyze examples/auth.log --export json
 ```
 
-##Saida
+## Saida
 
 📄 Events processed: 30
 🚨 SECURITY ALERTS (4)
@@ -180,13 +179,6 @@ O evento normalizado (`NormalizedEvent`) inclui:
 - Identidade (username)
 - Rede (src_ip, src_port, dst_ip, dst_port, protocol)
 - Linha raw original
-
-## .gitignore
-Os seguintes diretórios são ignorados:
-- `.venv/` - Ambiente virtual Python
-- `*.egg-info/` - Metadados do pacote
-- `__pycache__/` - Cache Python
-- `.pytest_cache/` - Cache do pytest
 
 ## Próximos passos (ideias)
 
