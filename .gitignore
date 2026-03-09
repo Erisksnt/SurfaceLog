@@ -4,6 +4,11 @@
 __pycache__/
 *.py[cod]
 *$py.class
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
 
 # ======================
 # Virtual environments
@@ -34,3 +39,5 @@ Thumbs.db
 build/
 dist/
 *.egg-info/
+__pycache__/
+*.egg
