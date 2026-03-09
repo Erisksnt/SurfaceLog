@@ -1,0 +1,104 @@
+[
+  {
+    "id": "b87d1996-323a-4923-a671-d6c84f7053c7",
+    "type": "BRUTE_FORCE",
+    "severity": "CRITICAL",
+    "timestamp": "2026-03-09T10:08:10",
+    "source": {
+      "ip": "192.168.1.100",
+      "port": 54321
+    },
+    "summary": "Possible brute force detected from 192.168.1.100",
+    "details": {
+      "attempts": 18,
+      "window_seconds": 60
+    },
+    "related_events": null,
+    "tags": null
+  },
+  {
+    "id": "59c4db62-6033-4427-b55d-2fae44d0eee5",
+    "type": "BRUTE_FORCE",
+    "severity": "CRITICAL",
+    "timestamp": "2026-03-09T10:05:41",
+    "source": {
+      "ip": "192.168.1.101",
+      "port": 55001
+    },
+    "summary": "Possible brute force detected from 192.168.1.101",
+    "details": {
+      "attempts": 15,
+      "window_seconds": 60
+    },
+    "related_events": null,
+    "tags": null
+  },
+  {
+    "id": "6a060856-8791-4fba-a350-6335535ae624",
+    "type": "BRUTE_FORCE",
+    "severity": "CRITICAL",
+    "timestamp": "2026-03-09T10:05:45",
+    "source": {
+      "ip": "192.168.1.102",
+      "port": 55101
+    },
+    "summary": "Possible brute force detected from 192.168.1.102",
+    "details": {
+      "attempts": 12,
+      "window_seconds": 60
+    },
+    "related_events": null,
+    "tags": null
+  },
+  {
+    "id": "27dbb2be-f489-41f6-8ea2-3bf33e32960f",
+    "type": "BRUTE_FORCE",
+    "severity": "CRITICAL",
+    "timestamp": "2026-03-09T10:06:20",
+    "source": {
+      "ip": "192.168.50.1",
+      "port": 45001
+    },
+    "summary": "Possible brute force detected from 192.168.50.1",
+    "details": {
+      "attempts": 12,
+      "window_seconds": 60
+    },
+    "related_events": null,
+    "tags": null
+  },
+  {
+    "id": "8f306441-b6cf-4ebf-b5e5-3d1b51870bbd",
+    "type": "BRUTE_FORCE",
+    "severity": "CRITICAL",
+    "timestamp": "2026-03-09T10:07:15",
+    "source": {
+      "ip": "192.168.80.5",
+      "port": 60001
+    },
+    "summary": "Possible brute force detected from 192.168.80.5",
+    "details": {
+      "attempts": 12,
+      "window_seconds": 60
+    },
+    "related_events": null,
+    "tags": null
+  },
+  {
+    "id": "a79d7fbf-5475-411c-908b-2a707161b7de",
+    "type": "BRUTE_FORCE",
+    "severity": "CRITICAL",
+    "timestamp": "2026-03-09T10:07:24",
+    "source": {
+      "ip": "192.168.1.120",
+      "port": 50001
+    },
+    "summary": "Possible brute force detected from 192.168.1.120",
+    "details": {
+      "attempts": 11,
+      "window_seconds": 60
+    },
+    "related_events": null,
+    "tags": null
+  }
+]

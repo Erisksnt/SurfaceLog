@@ -59,3 +59,47 @@ def is_off_hours(timestamp: datetime, rules: dict = None) -> bool:
     # Se start > end
     else:
         return current_time >= start_time or current_time < end_time
+
+
+def is_surface_scan(events: list, rule: dict) -> bool:
+    """
+    Detecta port scanning baseado em múltiplas conexões falhadas
+    em portas diferentes dentro de uma janela de tempo.
+    
+    Args:
+        events: Lista de NormalizedEvent
+        rule: Dicionário com configurações:
+            - window_seconds: Janela de tempo em segundos
+            - min_unique_ports: Mínimo de portas únicas
+            - min_events: Mínimo de eventos no padrão
+    
+    Returns:
+        bool: True se o padrão foi detectado
+    """
+    if not events:
+        return False
+    
+    window_seconds = rule.get("window_seconds", 60)
+    min_unique_ports = rule.get("min_unique_ports", 12)
+    min_events = rule.get("min_events", 15)
+    
+    # Ordenar por timestamp
+    sorted_events = sorted(events, key=lambda e: e.timestamp)
+    
+    # Sliding window approach
+    for i in range(len(sorted_events)):
+        window_start = sorted_events[i].timestamp
+        window_end = window_start + timedelta(seconds=window_seconds)
+        
+        events_in_window = [
+            e for e in sorted_events
+            if window_start <= e.timestamp <= window_end
+        ]
+        
+        if len(events_in_window) >= min_events:
+            unique_ports = set(e.dst_port for e in events_in_window if e.dst_port)
+            
+            if len(unique_ports) >= min_unique_ports:
+                return True
+    
+    return False

@@ -1,61 +1,53 @@
 # =========================
-# LINUX / SSH (normal noise)
+# BRUTEFORCE ATTACK (< 60 segundos)
+# IP 10.0.0.99 tenta 7 vezes em menos de 60s
 # =========================
-Jan 10 08:10:01 sshd Accepted password for erick from 192.168.1.10 port 55221
-Jan 10 08:12:14 sshd Failed password from 192.168.1.15 port 55310
-Jan 10 08:12:20 sshd Accepted password for erick from 192.168.1.15 port 55310
-Jan 10 08:14:33 systemd Started Session 55 of user root
+Mar  9 14:30:01 webserver sshd[1001]: Failed password for root from 10.0.0.99 port 60001 ssh2
+Mar  9 14:30:05 webserver sshd[1002]: Failed password for root from 10.0.0.99 port 60002 ssh2
+Mar  9 14:30:10 webserver sshd[1003]: Failed password for root from 10.0.0.99 port 60003 ssh2
+Mar  9 14:30:15 webserver sshd[1004]: Failed password for root from 10.0.0.99 port 60004 ssh2
+Mar  9 14:30:20 webserver sshd[1005]: Failed password for root from 10.0.0.99 port 60005 ssh2
+Mar  9 14:30:25 webserver sshd[1006]: Failed password for root from 10.0.0.99 port 60006 ssh2
+Mar  9 14:30:30 webserver sshd[1007]: Failed password for root from 10.0.0.99 port 60007 ssh2
 
 # =========================
-# FORTINET FIREWALL
+# ANOTHER BRUTEFORCE
+# IP 172.20.30.40 tenta 6 vezes em menos de 60s
 # =========================
-Jan 10 09:01:01 fortigate traffic allowed src=10.0.0.5 dst=8.8.8.8 proto=udp port 53
-Jan 10 09:01:05 fortigate traffic allowed src=10.0.0.5 dst=1.1.1.1 proto=tcp port 443
-Jan 10 09:02:10 fortigate denied connection from 45.33.12.9 port 445
-Jan 10 09:02:12 fortigate denied connection from 45.33.12.9 port 445
+Mar  9 14:35:01 webserver sshd[1010]: Failed password for admin from 172.20.30.40 port 53001 ssh2
+Mar  9 14:35:08 webserver sshd[1011]: Failed password for admin from 172.20.30.40 port 53002 ssh2
+Mar  9 14:35:15 webserver sshd[1012]: Failed password for admin from 172.20.30.40 port 53003 ssh2
+Mar  9 14:35:22 webserver sshd[1013]: Failed password for admin from 172.20.30.40 port 53004 ssh2
+Mar  9 14:35:29 webserver sshd[1014]: Failed password for admin from 172.20.30.40 port 53005 ssh2
+Mar  9 14:35:36 webserver sshd[1015]: Failed password for admin from 172.20.30.40 port 53006 ssh2
 
 # =========================
-# WINDOWS SECURITY LOG
+# OFF-HOURS ACTIVITY (23:45)
+# Tentativas de login em horário noturno
 # =========================
-Jan 10 10:05:11 winlogon Login successful user=Administrator from 10.10.10.20
-Jan 10 10:07:21 winlogon Login failure user=Administrator from 10.10.10.20
-Jan 10 10:07:23 winlogon Login failure user=Administrator from 10.10.10.20
+Mar  9 23:45:01 webserver sshd[2001]: Failed password for user erick from 192.168.1.10 port 51001 ssh2
+Mar  9 23:50:15 webserver sshd[2002]: Failed password for user erick from 192.168.1.10 port 51002 ssh2
 
 # =========================
-# APACHE WEB (ruído normal)
+# OFF-HOURS ACTIVITY (02:30)
+# Mais tentativas em horário proibido
 # =========================
-Jan 10 11:00:01 apache GET /index.html 200 from 172.16.0.5
-Jan 10 11:00:02 apache GET /favicon.ico 404 from 172.16.0.5
-Jan 10 11:00:05 apache warning slow request from 172.16.0.9
+Mar  9 02:30:01 webserver sshd[2010]: Failed password for databases from 10.20.30.50 port 52001 ssh2
+Mar  9 02:30:45 webserver sshd[2011]: Failed password for databases from 10.20.30.50 port 52002 ssh2
+Mar  9 02:31:20 webserver sshd[2012]: Failed password for databases from 10.20.30.50 port 52003 ssh2
 
 # =========================
-# MIKROTIK (porta textual)
+# OFF-HOURS ACTIVITY (04:15)
+# Acesso suspeito fora do horário comercial
 # =========================
-Jan 10 11:20:10 mikrotik login failure from 201.55.10.8 via winbox
-Jan 10 11:20:12 mikrotik login failure from 201.55.10.8 via winbox
-Jan 10 11:20:14 mikrotik login failure from 201.55.10.8 via winbox
-Jan 10 11:20:16 mikrotik login failure from 201.55.10.8 via winbox
-Jan 10 11:20:18 mikrotik login failure from 201.55.10.8 via winbox
+Mar  9 04:15:30 webserver sshd[2020]: Access denied for user developer from 192.168.50.100 port 53001 ssh2
+Mar  9 04:16:10 webserver sshd[2021]: Failed password for user developer from 192.168.50.100 port 53002 ssh2
 
 # =========================
-# SSH BRUTE FORCE REAL
+# NORMAL ACTIVITY (horário comercial)
 # =========================
-Jan 10 12:01:01 sshd Failed password from 10.0.0.99 port 6001
-Jan 10 12:01:02 sshd Failed password from 10.0.0.99 port 6002
-Jan 10 12:01:03 sshd Failed password from 10.0.0.99 port 6003
-Jan 10 12:01:04 sshd Failed password from 10.0.0.99 port 6004
-Jan 10 12:01:05 sshd Failed password from 10.0.0.99 port 6005
-Jan 10 12:01:06 sshd Failed password from 10.0.0.99 port 6006
-
-# =========================
-# OFF HOURS suspicious
-# =========================
-Jan 10 02:10:01 sshd Failed password from 222.222.222.222 port 4444
-Jan 10 02:10:02 sshd Failed password from 222.222.222.222 port 4445
-
-# =========================
-# more noise
-# =========================
-Jan 10 13:30:01 systemd INFO cleanup completed
-Jan 10 13:35:22 kernel warning cpu temperature high
-Jan 10 13:40:01 sshd Accepted password for erick from 192.168.1.10 port 55222
+Mar  9 08:00:00 webserver sshd[3001]: Accepted publickey for erick from 192.168.1.10 port 55210 ssh2
+Mar  9 08:00:01 webserver sshd[3002]: User child is on pty and we are daemonizing
+Mar  9 09:30:00 webserver sshd[3010]: Accepted password for user from 10.0.0.100 port 55220 ssh2
+Mar  9 12:00:00 webserver sshd[3020]: Accepted publickey for admin from 192.168.1.20 port 55230 ssh2
+Mar  9 17:45:00 webserver sshd[3030]: Accepted password for erick from 192.168.1.10 port 55240 ssh2

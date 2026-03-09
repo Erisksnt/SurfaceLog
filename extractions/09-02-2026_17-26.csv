@@ -1,5 +1,0 @@
-id,type,severity,timestamp,source_ip,source_ports,summary
-cf6e343a-778c-4e6c-98cc-b551c379d35b,BRUTE_FORCE,CRITICAL,2026-01-10T11:20:18,201.55.10.8,winbox,Possible brute force detected from 201.55.10.8
-75f3fb36-69c9-4e23-9816-0f1d1ac88aad,BRUTE_FORCE,CRITICAL,2026-01-10T12:01:06,10.0.0.99,6001,Possible brute force detected from 10.0.0.99
-0710a7d4-bfd2-4912-a34c-f6e029e23749,OFF_HOURS_ACTIVITY,MEDIUM,2026-01-10T02:10:01,222.222.222.222,4444,Suspicious activity detected outside business hours
-4a1f96e2-92fd-4156-a684-d1a017e37cff,OFF_HOURS_ACTIVITY,MEDIUM,2026-01-10T02:10:02,222.222.222.222,4445,Suspicious activity detected outside business hours

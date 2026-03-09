@@ -1,0 +1,14 @@
+[
+  {
+    "port": 53,
+    "service": "UNKNOWN",
+    "status": "open",
+    "banner": null
+  },
+  {
+    "port": 443,
+    "service": "HTTPS",
+    "status": "open",
+    "banner": null
+  }
+]

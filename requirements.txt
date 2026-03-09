@@ -1,2 +1,3 @@
+surfacescan==0.1.0
 PyYAML>=6.0
-surfacescan==X.Y.Z
+-e ../SurfaceScan/  # Referência local ao projeto SurfaceScan

@@ -4,6 +4,7 @@ from datetime import datetime
 from pathlib import Path
 from surfacelog.core.analyzer import analyze_log
 from surfacelog.reports.registry import exporter
+from surfacelog.scan import scan_ip
 from collections import Counter
 
 # =========================
@@ -175,10 +176,52 @@ def main():
         help="Export alerts directly without interactive menu"
     )
 
+    # =========================
+    # SCAN COMMAND
+    # =========================
+    scan_parser = subparsers.add_parser(
+        "scan",
+        help="Port scan a specific IP"
+    )
+    scan_parser.add_argument(
+        "host",
+        help="IP or hostname to scan (e.g. 192.168.0.1)"
+    )
+    scan_parser.add_argument(
+        "-p", "--ports",
+        default="22,80,443,3306,5432,8080,8443,27017,6379",
+        help="Ports to scan (e.g. 22,80,443 or 22,80,443,8000-8100)"
+    )
+    scan_parser.add_argument(
+        "-t", "--timeout",
+        type=float,
+        default=1.0,
+        help="Timeout per port in seconds"
+    )
+    scan_parser.add_argument(
+        "--threads",
+        type=int,
+        default=50,
+        help="Number of threads for parallel scanning"
+    )
+    scan_parser.add_argument(
+        "-e", "--export",
+        choices=["csv", "json", "both"],
+        help="Export results (csv, json, or both)"
+    )
+
     args = parser.parse_args()
 
     if args.command == "analyze":
         run_analyze(args.logfile, args.alerts_only, args.export)
+    elif args.command == "scan":
+        scan_ip(
+            host=args.host,
+            ports_expr=args.ports,
+            timeout=args.timeout,
+            threads=args.threads,
+            export_format=args.export
+        )
     else:
         parser.print_help()
         sys.exit(1)

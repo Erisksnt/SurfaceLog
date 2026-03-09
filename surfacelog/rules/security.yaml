@@ -7,6 +7,21 @@ off_hours:
   end: "06:00"
 
 surface_scan:
-  window_seconds: 60
-  min_unique_ports: 12
-  min_events: 15
+  # ===== DETECÇÃO PASSIVA =====
+  window_seconds: 60           # Janela de tempo para detectar padrão
+  min_unique_ports: 12         # Mínimo de portas diferentes
+  min_events: 15               # Mínimo de eventos de conexão
+  
+  # ===== DETECÇÃO ATIVA (SurfaceScan) =====
+  active_scan_enabled: true    # Ativar scan com SurfaceScan?
+  
+  # Critério para quem scanear
+  min_failures_for_scan: 3     # Número mínimo de failed logins para entrar na lista de scan
+  
+  # Configuração do SurfaceScan
+  ports: "22,80,443,3306,5432,8080,8443,27017,6379"  # Portas a escanear
+  timeout: 1.0                 # Timeout por porta (segundos)
+  threads: 50                  # Threads para scan paralelo
+  
+  # Limites de alerta
+  max_open_ports_threshold: 3  # Gerar alerta se >= N portas abertas

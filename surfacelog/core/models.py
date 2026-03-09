@@ -78,4 +78,6 @@ class Alert:
 ALERT_SEVERITY = {
     "BRUTE_FORCE": Severity.CRITICAL,
     "OFF_HOURS_ACTIVITY": Severity.MEDIUM,
+    "SURFACE_SCAN": Severity.HIGH,
+    "EXPOSED_SERVICES": Severity.HIGH,
 }
