@@ -5,3 +5,8 @@ bruteforce:
 off_hours:
   start: "22:00"
   end: "06:00"
+
+surface_scan:
+  window_seconds: 60
+  min_unique_ports: 12
+  min_events: 15
